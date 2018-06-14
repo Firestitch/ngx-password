@@ -12,6 +12,8 @@ import { FsPasswordModule } from '../src';
 
 import { AppComponent } from './app/app.component';
 import { PasswordExampleComponent } from './app/components';
+import { FsMessageModule } from '@firestitch/message';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -25,6 +27,8 @@ import { PasswordExampleComponent } from './app/components';
 
     FsExampleModule,
     FsPasswordModule,
+    FsMessageModule.forRoot(),
+    ToastrModule.forRoot({ preventDuplicates: true }),
   ],
   entryComponents: [
   ],
