@@ -1,6 +1,12 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FsMessage } from '@firestitch/message';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import {
+  Component, EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
+
+import { IFsPasswordConfig } from '../../interfaces';
 
 
 @Component({
@@ -8,64 +14,73 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
   templateUrl: 'fs-password.component.html',
   styleUrls: ['./fs-password.component.scss']
 })
-export class FsPasswordComponent implements OnInit {
+export class FsPasswordComponent implements OnInit, OnDestroy {
 
-  public minLength: number;
-  public title: string;
-  public enableCurrentPassword: boolean;
+  @Input() config: IFsPasswordConfig;
+
+  public currentPasswordValue: string;
+  @Input() get currentPassword() {
+    return this.currentPasswordValue;
+  }
+  @Output() currentPasswordChange = new EventEmitter();
+  set currentPassword(value) {
+    this.currentPasswordValue = value;
+    this.currentPasswordChange.emit(this.currentPasswordValue);
+  }
+
+  public newPasswordValue: string;
+  @Input() get newPassword() {
+    return this.newPasswordValue;
+  }
+  @Output() newPasswordChange = new EventEmitter();
+  set newPassword(value) {
+    this.newPasswordValue = value;
+    this.newPasswordChange.emit(this.newPasswordValue);
+  }
+
+  public confirmPasswordValue: string;
+  @Input() get confirmPassword() {
+    return this.confirmPasswordValue;
+  }
+  @Output() confirmPasswordChange = new EventEmitter();
+  set confirmPassword(value) {
+    this.confirmPasswordValue = value;
+    this.confirmPasswordChange.emit(this.confirmPasswordValue);
+  }
 
   public hideCurrent: boolean;
   public hideNew: boolean;
   public hideConfirm: boolean;
 
-  public currentPassword: string;
-  public newPassword: string;
-  public confirmPassword: string;
+  public excludeFormFunction = ((formControl) => {
+    this.config.exclude.forEach(word => {
+      if (this.newPasswordValue.toLowerCase().indexOf(word.toLowerCase()) !== -1) {
+        throw "Password can't include these words";
+      }
+    })
 
-  constructor(private _fsMessage: FsMessage,
-              private _dialogRef: MatDialogRef<FsPasswordComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any) {}
+  }).bind(this);
+
+  constructor() {}
 
   ngOnInit() {
-    this.setSetting();
+    this.setDefaultSettings();
+    this.setDefaultConfig();
   }
 
-  public save() {
-    this._fsMessage.info(`Updating ...`);
+  ngOnDestroy() {}
 
-    this.data.validate(this.currentPassword, this.newPassword)
-      .then((successText) => {
-        this.success(successText);
-        this.close();
-      })
-      .catch((errorText) => {
-        this.invalid(errorText);
-      })
-  }
-
-  public success(text?: string) {
-    this._fsMessage.success(text || `Password successfully changed from "${this.currentPassword}" to "${this.newPassword}"`);
-  }
-
-  public invalid(text?: string) {
-    this._fsMessage.error(text || 'Validation invalid', { mode: 'toast' });
-  }
-
-  public close() {
-    this._dialogRef.close();
-  }
-
-  public forgotPassword() {
-    this.data.forgontPassword();
-  }
-
-  private setSetting() {
-    this.minLength = this.data && this.data.minLength || 8;
-    this.title = this.data && this.data.title || 'Password';
-    this.enableCurrentPassword = this.data && this.data.enableCurrentPassword;
-
+  private setDefaultSettings() {
     this.hideCurrent = true;
     this.hideNew = true;
     this.hideConfirm = true;
+  }
+
+  private setDefaultConfig() {
+    this.config = Object.assign({
+      minLength: 6,
+      enableCurrentPassword: true,
+      exclude: [],
+    }, this.config);
   }
 }

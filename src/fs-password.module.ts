@@ -11,9 +11,11 @@ import {
   MatTooltipModule
 } from '@angular/material';
 
-import { FsPasswordComponent } from './components/fs-password/fs-password.component';
+import { FsPasswordComponent } from './components';
 import { FsFormModule } from '@firestitch/form';
 import { FsMessageModule } from '@firestitch/message';
+import { FsPasswordService } from './services';
+
 
 @NgModule({
   imports: [
@@ -34,6 +36,7 @@ import { FsMessageModule } from '@firestitch/message';
     FsMessageModule,
   ],
   exports: [
+    FsPasswordComponent
   ],
   entryComponents: [
     FsPasswordComponent,
@@ -47,7 +50,8 @@ import { FsMessageModule } from '@firestitch/message';
 export class FsPasswordModule {
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: FsPasswordModule
+      ngModule: FsPasswordModule,
+      providers: [ FsPasswordService ]
     };
   }
 }
