@@ -11,12 +11,12 @@ import { IFsPasswordConfig } from '../../interfaces';
 
 @Component({
   selector: 'fs-password',
-  templateUrl: 'fs-password.component.html',
+  templateUrl: './fs-password.component.html',
   styleUrls: ['./fs-password.component.scss']
 })
 export class FsPasswordComponent implements OnInit, OnDestroy {
 
-  @Input() config: IFsPasswordConfig;
+  @Input() config: IFsPasswordConfig = null;
 
   public currentPasswordValue: string;
   @Input() get currentPassword() {
