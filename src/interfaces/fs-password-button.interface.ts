@@ -1,5 +1,6 @@
 export interface IFsPasswordButton {
   label?: string;
-  action?: string | Function;
+  action?: string;
+  click?: Function;
   color?: string;
 }

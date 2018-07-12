@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { IFsPasswordDialogConfig, IFsPasswordButton } from '../interfaces';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { FsPasswordDialogComponent } from '../components/fs-password-dialog/fs-password-dialog.component';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class FsPasswordService {
@@ -9,9 +11,7 @@ export class FsPasswordService {
   private _defaultButtons: IFsPasswordButton[];
   private _matRef: MatDialogRef<any, any>;
 
-  private _promise: Promise<any>;
-  private _resolver: any;
-  private _rejector: any;
+  private _subscriber: Subject<any>;
 
   constructor(private _dialog: MatDialog) {
     this._defaultDialogConfig = {
@@ -33,26 +33,22 @@ export class FsPasswordService {
     ]
   }
 
-  public open(configs: IFsPasswordDialogConfig): Promise<any> {
-    this.initPromise();
+  public open(configs: IFsPasswordDialogConfig): Observable<any> {
+    this._subscriber = new Subject();
     const config = this.composeConfig(configs);
     this._matRef = this._dialog.open(FsPasswordDialogComponent, config);
     this.subscribeOnClose();
-    return this._promise;
+    return this._subscriber.asObservable();
   }
 
   public subscribeOnClose() {
     const sub = this._matRef.afterClosed().subscribe((res) => {
       sub.unsubscribe();
-      res.action === 'done' ? this._resolver(res) : this._rejector(res);
-    })
-  }
+      res.action === 'cancel' ?
+        this._subscriber.error(res) : this._subscriber.next(res);
 
-  private initPromise() {
-    this._promise = new Promise((resolve, reject) => {
-      this._resolver = resolve;
-      this._rejector = reject;
-    });
+      this._subscriber.unsubscribe();
+    })
   }
 
   /**
