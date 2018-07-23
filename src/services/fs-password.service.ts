@@ -17,6 +17,7 @@ export class FsPasswordService {
     this._defaultDialogConfig = {
       minWidth: '400px',
       autoFocus: false,
+      disableClose: true,
     };
 
     this._defaultButtons = [

@@ -29,6 +29,8 @@ export class FsPasswordDialogComponent implements OnInit, OnDestroy {
       enableCurrentPassword: this.data.enableCurrentPassword,
       exclude: this.data.exclude
     };
+
+    this.configStylesForButtons();
   }
 
   public callAction(index: number, action = 'custom') {
@@ -67,6 +69,20 @@ export class FsPasswordDialogComponent implements OnInit, OnDestroy {
 
   private closeDialog(result: { action: string, result?: any }) {
     this.dialogRef.close(result);
+  }
+
+  /**
+   * Config obj of classes for additing it to ngClass
+   */
+  private configStylesForButtons() {
+    this.data.buttons.forEach((btn: IFsPasswordButton) => {
+      if (btn.classList && btn.classList.length) {
+        btn.classes = {};
+        btn.classList.forEach((cl: string) => {
+          btn.classes[cl] = true;
+        })
+      }
+    });
   }
 
 }

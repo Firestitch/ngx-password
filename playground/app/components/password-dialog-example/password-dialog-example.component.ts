@@ -1,5 +1,4 @@
 import { Component, OnDestroy } from '@angular/core';
-import { FsMessage } from '@firestitch/message';
 import { FsPasswordService } from '../../../../src/services/fs-password.service';
 
 import { Observable } from 'rxjs/Observable';
@@ -8,13 +7,15 @@ import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'password-dialog-example',
+  styleUrls: ['password-dialog-example.component.scss'],
   templateUrl: 'password-dialog-example.component.html',
 })
 export class PasswordDialogExampleComponent implements OnDestroy {
   private _sub: Subscription;
 
-  constructor(private _fsMessage: FsMessage,
-              private _fsPasswordService: FsPasswordService) {}
+  constructor(private _fsPasswordService: FsPasswordService) {
+
+  }
 
   public openDialog() {
     this._sub = this._fsPasswordService.open({
@@ -28,19 +29,17 @@ export class PasswordDialogExampleComponent implements OnDestroy {
         {
           label: 'Update password',
           action: 'done',
-          color: 'primary'
         },
         {
           label: 'Cancel',
           action: 'cancel',
-          color: 'primary'
+          classList: ['specific-class']
         },
         {
           label: 'Forgot password',
           click: () => {
             console.log('forgot password');
-          },
-          color: 'warn'
+          }
         },
       ]
     }).subscribe(
