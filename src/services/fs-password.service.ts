@@ -15,7 +15,6 @@ export class FsPasswordService {
 
   constructor(private _dialog: MatDialog) {
     this._defaultDialogConfig = {
-      minWidth: '400px',
       autoFocus: false,
       disableClose: true,
     };
