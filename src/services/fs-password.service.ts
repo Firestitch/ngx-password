@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { IFsPasswordDialogConfig, IFsPasswordButton } from '../interfaces';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { FsPasswordDialogComponent } from '../components/fs-password-dialog/fs-password-dialog.component';
+import {Subscription} from 'rxjs/Subscription';
+import { Observable } from '../../node_modules/rxjs';
 
 @Injectable()
 export class FsPasswordService {
@@ -33,25 +35,21 @@ export class FsPasswordService {
     ]
   }
 
-  public open(configs: IFsPasswordDialogConfig): Promise<any> {
-    this.initPromise();
-    const config = this.composeConfig(configs);
-    this._matRef = this._dialog.open(FsPasswordDialogComponent, config);
-    this.subscribeOnClose();
-    return this._promise;
-  }
+  public open(configs: IFsPasswordDialogConfig) {
 
-  public subscribeOnClose() {
-    const sub = this._matRef.afterClosed().subscribe((res) => {
-      sub.unsubscribe();
-      res.action === 'done' ? this._resolver(res) : this._rejector(res);
-    })
-  }
+    return Observable.create(observer => {
 
-  private initPromise() {
-    this._promise = new Promise((resolve, reject) => {
-      this._resolver = resolve;
-      this._rejector = reject;
+      const config = this.composeConfig(configs);
+      this._matRef = this._dialog.open(FsPasswordDialogComponent, config);
+      const sub = this._matRef.afterClosed().subscribe((res) => {
+        sub.unsubscribe();
+        res.action === 'done' ? observer.next(res) : observer.error(res);
+      });
+
+      return () => {
+        this._matRef.close();
+        sub.unsubscribe();
+      }
     });
   }
 
@@ -61,9 +59,15 @@ export class FsPasswordService {
    * @returns MatDialogConfig
    */
   private composeConfig(configs: IFsPasswordDialogConfig) {
+
     if (!configs.buttons.length) {
       configs.buttons = this._defaultButtons;
     }
+
+    configs.buttons.forEach((btn) => {
+      btn.type = btn.action == 'done' ? 'submit' : 'button';
+    });
+
     return Object.assign({ data: configs }, this._defaultDialogConfig );
   }
 }

@@ -2,7 +2,7 @@ import { Component, OnDestroy, Inject, OnInit } from '@angular/core';
 
 import { IFsPasswordDialogConfig, IFsPasswordConfig } from '../../interfaces';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import {Subscription} from 'rxjs/Subscription';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'fs-password-dialog',
@@ -11,16 +11,11 @@ import {Subscription} from 'rxjs/Subscription';
 })
 export class FsPasswordDialogComponent implements OnInit, OnDestroy {
 
-  public currentPassword: string;
-  public newPassword: string;
   public config: IFsPasswordConfig;
-
   private _doneSub: Subscription;
 
   constructor(public dialogRef: MatDialogRef<FsPasswordDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: IFsPasswordDialogConfig) {
-
-  }
+              @Inject(MAT_DIALOG_DATA) public data: IFsPasswordDialogConfig) {}
 
   public ngOnInit() {
     this.config = {
@@ -30,36 +25,21 @@ export class FsPasswordDialogComponent implements OnInit, OnDestroy {
     };
   }
 
-  public callAction(action) {
+  public click(action) {
     if (typeof action === 'function') {
       action.call();
-      this.dialogRef.close({ action: 'custom'});
-    } else {
-
-      switch (action) {
-        case 'done': {
-          this.done();
-        }
-          break;
-        case 'cancel': {
-          this.cancel();
-        }
-          break;
-        default: {
-          console.log(action, 'there is no function for this action')
-        }
-      }
+    } else  if (action === 'cancel') {
+      this.cancel();
     }
   }
 
   public done() {
-    this._doneSub = this.data.done(this.currentPassword, this.newPassword).subscribe(
+    debugger;
+    this._doneSub = this.data.done(this.data.newPassword, this.data.currentPassword).subscribe(
       (res) => {
         this.dialogRef.close({ action: 'done', result: res });
       },
-      (error) => {
-        console.error('error', error);
-      });
+      (error) => {});
   }
 
   public cancel() {

@@ -15,11 +15,12 @@ export class PasswordDialogExampleComponent {
               private _fsPasswordService: FsPasswordService) {}
 
   public openDialog() {
-    this._fsPasswordService.open({
+    const subscription = this._fsPasswordService.open({
       minLength: 6,
       enableCurrentPassword: true, // enables current password
       exclude: ['123@123.com'],
-      done: (oldPassword, newPassword) => {
+      done: (newPassword, oldPassword) => {
+        debugger;
         return Observable.from(['200']);
       },
       buttons: [
@@ -29,19 +30,20 @@ export class PasswordDialogExampleComponent {
           color: 'primary'
         },
         {
-          label: 'Cancel',
-          action: 'cancel',
-          color: 'primary'
-        },
-        {
           label: 'Forgot password',
           action: () => {
+            subscription.unsubscribe();
             console.log('forgot password');
           },
           color: 'warn'
         },
+        {
+          label: 'Cancel',
+          action: 'cancel',
+          color: 'primary'
+        }
       ]
-    }).then(
+    }).subscribe(
       (res) => {
         console.log('res', res);
       },

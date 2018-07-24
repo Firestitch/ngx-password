@@ -4,7 +4,9 @@ import { IFsPasswordConfig } from './fs-password-config.interface';
 
 export interface IFsPasswordDialogConfig extends IFsPasswordConfig {
   buttons?: IFsPasswordButton[];
-  done?: IDoneFunc; // observable done func
+  done?: IDoneFunc; // observable done func,
+  newPassword?,
+  currentPassword?
 }
 
 
