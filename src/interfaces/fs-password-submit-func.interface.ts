@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs/Observable';
 
-export interface IDoneFunc {
+export interface ISubmitFunc {
   (newPassword: string, currentPassword: string): Observable<any>
 }

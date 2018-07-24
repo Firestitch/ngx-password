@@ -3,16 +3,27 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  Output
+  Output,
+  Optional
 } from '@angular/core';
-
+import { ControlContainer, NgForm } from '@angular/forms';
 import { IFsPasswordConfig } from '../../interfaces';
 
+export function controlContainerFactory(controlContainer?: ControlContainer) {
+  return controlContainer;
+}
 
 @Component({
   selector: 'fs-password',
   templateUrl: './fs-password.component.html',
-  styleUrls: ['./fs-password.component.scss']
+  styleUrls: ['./fs-password.component.scss'],
+  viewProviders: [
+    {
+      provide: ControlContainer,
+      useFactory: controlContainerFactory,
+      deps: [[new Optional(), NgForm]]
+    }
+  ]
 })
 export class FsPasswordComponent implements OnInit, OnDestroy {
 
@@ -55,7 +66,7 @@ export class FsPasswordComponent implements OnInit, OnDestroy {
   public excludeFormFunction = ((formControl) => {
     this.config.exclude.forEach(word => {
       if (this.newPasswordValue.toLowerCase().indexOf(word.toLowerCase()) !== -1) {
-        throw "Password can't include these words";
+        throw "The password you choose is not allowed";
       }
     })
 

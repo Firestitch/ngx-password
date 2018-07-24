@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { AppMaterialModule } from './app/material.module';
 
 import { FsExampleModule } from '@firestitch/example';
+import { FsFormModule } from '@firestitch/form';
 import { FsPasswordModule } from '../src';
 
 import { AppComponent } from './app/app.component';
@@ -29,7 +30,7 @@ import {
     FormsModule,
 
     AppMaterialModule,
-
+    FsFormModule,
     FsExampleModule,
     FsPasswordModule.forRoot(),
     FsMessageModule.forRoot(),

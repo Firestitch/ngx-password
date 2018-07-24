@@ -3,6 +3,7 @@ import { Component, OnDestroy, Inject, OnInit } from '@angular/core';
 import { IFsPasswordDialogConfig, IFsPasswordConfig } from '../../interfaces';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
+import { IFsPasswordButton } from '../../interfaces/fs-password-button.interface';
 
 @Component({
   selector: 'fs-password-dialog',
@@ -12,7 +13,7 @@ import { Subscription } from 'rxjs/Subscription';
 export class FsPasswordDialogComponent implements OnInit, OnDestroy {
 
   public config: IFsPasswordConfig;
-  private _doneSub: Subscription;
+  private subscription: Subscription;
 
   constructor(public dialogRef: MatDialogRef<FsPasswordDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: IFsPasswordDialogConfig) {}
@@ -23,31 +24,53 @@ export class FsPasswordDialogComponent implements OnInit, OnDestroy {
       enableCurrentPassword: this.data.enableCurrentPassword,
       exclude: this.data.exclude
     };
+
+    this.configStylesForButtons();
   }
 
-  public click(action) {
-    if (typeof action === 'function') {
-      action.call();
-    } else  if (action === 'cancel') {
+  public click(btn) {
+    if (typeof btn.action === 'function') {
+      btn.action.call();
+    } else if (btn.action === 'cancel') {
       this.cancel();
     }
   }
 
-  public done() {
-    debugger;
-    this._doneSub = this.data.done(this.data.newPassword, this.data.currentPassword).subscribe(
+  public submit() {
+
+    this.subscription = this.data.submit(this.data.newPassword, this.data.currentPassword).subscribe(
       (res) => {
-        this.dialogRef.close({ action: 'done', result: res });
+        this.closeDialog({ action: 'submit', result: res });
       },
       (error) => {});
   }
 
   public cancel() {
-    this.dialogRef.close({ action: 'cancel' });
+    this.closeDialog({ action: 'cancel' });
   }
 
   public ngOnDestroy() {
-    this._doneSub && this._doneSub.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
+  private closeDialog(result: { action: string, result?: any }) {
+    this.dialogRef.close(result);
+  }
+
+  /**
+   * Config obj of classes for additing it to ngClass
+   */
+  private configStylesForButtons() {
+    this.data.buttons.forEach((btn: IFsPasswordButton) => {
+      if (btn.classList && btn.classList.length) {
+        btn.classes = {};
+        btn.classList.forEach((cl: string) => {
+          btn.classes[cl] = true;
+        })
+      }
+    });
   }
 
 }

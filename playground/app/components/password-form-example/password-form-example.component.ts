@@ -10,26 +10,21 @@ export class PasswordFormExampleComponent {
 
   public currentPassword: string;
   public newPassword: string;
+  public config;
 
-  constructor(private _fsMessage: FsMessage) {}
+  constructor(private _fsMessage: FsMessage) {
+    this.config = {
+      minLength:  3,
+      enableCurrentPassword: true,
+      exclude: ['admin','god','password']
+    };    
+  }
 
-  public save() {
+  public submit() {
     this._fsMessage.info(`Updating ...`);
-
     setTimeout(() => {
-      if (this.currentPassword !== this.newPassword) {
-        this.success();
-      } else {
-        this.invalid('The old password shouldn\'t be equal the new password ');
-      }
-    }, 2000);
-  }
-
-  public success(text?: string) {
-    this._fsMessage.success(text || `Password successfully changed from "${this.currentPassword}" to "${this.newPassword}"`);
-  }
-
-  public invalid(text?: string) {
-    this._fsMessage.error(text || 'Validation invalid', { mode: 'toast' });
+      const msg = `Password successfully changed from "${this.currentPassword}" to "${this.newPassword}"`;
+      this._fsMessage.success(msg);     
+    }, 1000);
   }
 }

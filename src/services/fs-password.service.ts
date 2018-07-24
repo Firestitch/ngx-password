@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { IFsPasswordDialogConfig, IFsPasswordButton } from '../interfaces';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { FsPasswordDialogComponent } from '../components/fs-password-dialog/fs-password-dialog.component';
-import {Subscription} from 'rxjs/Subscription';
-import { Observable } from '../../node_modules/rxjs';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+
 
 @Injectable()
 export class FsPasswordService {
@@ -11,20 +12,18 @@ export class FsPasswordService {
   private _defaultButtons: IFsPasswordButton[];
   private _matRef: MatDialogRef<any, any>;
 
-  private _promise: Promise<any>;
-  private _resolver: any;
-  private _rejector: any;
+  private _subscriber: Subject<any>;
 
   constructor(private _dialog: MatDialog) {
     this._defaultDialogConfig = {
-      minWidth: '400px',
       autoFocus: false,
+      disableClose: true,
     };
 
     this._defaultButtons = [
       {
         label: 'Update password',
-        action: 'done',
+        action: 'submit',
         color: 'primary'
       },
       {
@@ -43,7 +42,7 @@ export class FsPasswordService {
       this._matRef = this._dialog.open(FsPasswordDialogComponent, config);
       const sub = this._matRef.afterClosed().subscribe((res) => {
         sub.unsubscribe();
-        res.action === 'done' ? observer.next(res) : observer.error(res);
+        res.action === 'submit' ? observer.next(res) : observer.error(res);
       });
 
       return () => {
@@ -55,19 +54,23 @@ export class FsPasswordService {
 
   /**
    * Generate config with default settings and default buttons
-   * @param {IFsPasswordDialogConfig} configs
+   * @param {IFsPasswordDialogConfig} config
    * @returns MatDialogConfig
    */
-  private composeConfig(configs: IFsPasswordDialogConfig) {
+  private composeConfig(config: IFsPasswordDialogConfig) {
 
-    if (!configs.buttons.length) {
-      configs.buttons = this._defaultButtons;
+    if (!config.buttons.length) {
+      config.buttons = this._defaultButtons;
     }
 
-    configs.buttons.forEach((btn) => {
-      btn.type = btn.action == 'done' ? 'submit' : 'button';
+    config.buttons.forEach((btn) => {
+      btn.type = btn.action == 'submit' ? 'submit' : 'button';
     });
 
-    return Object.assign({ data: configs }, this._defaultDialogConfig );
+    if (!config.title) {
+      config.title = 'Change Password';
+    }
+
+    return Object.assign({ data: config }, this._defaultDialogConfig );
   }
 }
