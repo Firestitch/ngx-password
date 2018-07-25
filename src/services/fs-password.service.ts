@@ -3,7 +3,6 @@ import { IFsPasswordDialogConfig, IFsPasswordButton } from '../interfaces';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { FsPasswordDialogComponent } from '../components/fs-password-dialog/fs-password-dialog.component';
 import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
 
 
 @Injectable()
@@ -11,8 +10,6 @@ export class FsPasswordService {
   private _defaultDialogConfig: MatDialogConfig;
   private _defaultButtons: IFsPasswordButton[];
   private _matRef: MatDialogRef<any, any>;
-
-  private _subscriber: Subject<any>;
 
   constructor(private _dialog: MatDialog) {
     this._defaultDialogConfig = {

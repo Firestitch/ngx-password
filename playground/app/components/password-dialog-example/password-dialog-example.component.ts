@@ -1,9 +1,7 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { FsPasswordService } from '../../../../src/services/fs-password.service';
 
 import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-
 
 @Component({
   selector: 'password-dialog-example',
