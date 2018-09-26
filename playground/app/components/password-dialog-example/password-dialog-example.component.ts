@@ -1,24 +1,28 @@
 import { Component } from '@angular/core';
-import { FsPasswordService } from '../../../../src/services/fs-password.service';
 
 import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
+
+import { FsPasswordService } from '../../../../src/services/fs-password.service';
+
 
 @Component({
   selector: 'password-dialog-example',
-  styleUrls: ['password-dialog-example.component.scss'],
-  templateUrl: 'password-dialog-example.component.html',
+  templateUrl: './password-dialog-example.component.html',
+  styleUrls: ['./password-dialog-example.component.scss'],
 })
 export class PasswordDialogExampleComponent {
-  
+
   constructor(private fsPasswordService: FsPasswordService) {}
 
   public openDialog() {
     const subscription = this.fsPasswordService.open({
+      title: 'Password Title',
       minLength: 6,
       enableCurrentPassword: true, // enables current password
-      exclude: ['123@123.com'],
+      exclude: ['123456'],
       submit: (newPassword, oldPassword) => {
-        return Observable.from(['200']);
+        return of({ password: newPassword, currentPassword: oldPassword });
       },
       buttons: [
         {
@@ -39,11 +43,13 @@ export class PasswordDialogExampleComponent {
         }
       ]
     }).subscribe(
-    (res) => {
-      console.log('res', res);
-    },
-    (error) => {
-      console.log('error', error);
-    });
+      res => {
+        console.log('res', res);
+      },
+      error => {
+        console.log('error', error);
+      }
+    );
   }
+
 }

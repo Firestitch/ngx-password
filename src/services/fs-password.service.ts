@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
-import { IFsPasswordDialogConfig, IFsPasswordButton } from '../interfaces';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
-import { FsPasswordDialogComponent } from '../components/fs-password-dialog/fs-password-dialog.component';
+
 import { Observable } from 'rxjs/Observable';
+
+import { IFsPasswordDialogConfig, IFsPasswordButton } from '../interfaces';
+import { FsPasswordDialogComponent } from '../components';
 
 
 @Injectable()
 export class FsPasswordService {
+
   private _defaultDialogConfig: MatDialogConfig;
   private _defaultButtons: IFsPasswordButton[];
   private _matRef: MatDialogRef<any, any>;
@@ -37,7 +40,7 @@ export class FsPasswordService {
 
       const config = this.composeConfig(configs);
       this._matRef = this._dialog.open(FsPasswordDialogComponent, config);
-      const sub = this._matRef.afterClosed().subscribe((res) => {
+      const sub = this._matRef.afterClosed().subscribe(res => {
         sub.unsubscribe();
         res.action === 'submit' ? observer.next(res) : observer.error(res);
       });

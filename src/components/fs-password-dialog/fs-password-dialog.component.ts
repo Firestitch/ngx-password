@@ -1,9 +1,11 @@
 import { Component, OnDestroy, Inject, OnInit } from '@angular/core';
-
-import { IFsPasswordDialogConfig, IFsPasswordConfig } from '../../interfaces';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+
 import { Subscription } from 'rxjs/Subscription';
+
 import { IFsPasswordButton } from '../../interfaces/fs-password-button.interface';
+import { IFsPasswordDialogConfig, IFsPasswordConfig } from '../../interfaces';
+
 
 @Component({
   selector: 'fs-password-dialog',
@@ -39,7 +41,7 @@ export class FsPasswordDialogComponent implements OnInit, OnDestroy {
   public submit() {
 
     this.subscription = this.data.submit(this.data.newPassword, this.data.currentPassword).subscribe(
-      (res) => {
+      res => {
         this.closeDialog({ action: 'submit', result: res });
       },
       (error) => {});

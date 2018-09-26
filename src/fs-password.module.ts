@@ -11,11 +11,12 @@ import {
   MatTooltipModule
 } from '@angular/material';
 
-import { FsPasswordComponent } from './components';
 import { FsFormModule } from '@firestitch/form';
 import { FsMessageModule } from '@firestitch/message';
+
+import { FsPasswordComponent } from './components';
 import { FsPasswordService } from './services';
-import { FsPasswordDialogComponent } from './components/fs-password-dialog/fs-password-dialog.component';
+import { FsPasswordDialogComponent } from './components';
 
 
 @NgModule({

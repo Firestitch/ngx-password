@@ -13,6 +13,7 @@ export function controlContainerFactory(controlContainer?: ControlContainer) {
   return controlContainer;
 }
 
+
 @Component({
   selector: 'fs-password',
   templateUrl: './fs-password.component.html',
@@ -66,7 +67,7 @@ export class FsPasswordComponent implements OnInit, OnDestroy {
   public excludeFormFunction = ((formControl) => {
     this.config.exclude.forEach(word => {
       if (this.newPasswordValue.toLowerCase().indexOf(word.toLowerCase()) !== -1) {
-        throw "The password you choose is not allowed";
+        throw `The password cannot be the word '${this.newPasswordValue}'`;
       }
     })
 
