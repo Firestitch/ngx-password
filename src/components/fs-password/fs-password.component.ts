@@ -1,5 +1,6 @@
 import {
-  Component, EventEmitter,
+  Component,
+  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
@@ -7,6 +8,7 @@ import {
   Optional
 } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
+
 import { IFsPasswordConfig } from '../../interfaces';
 
 export function controlContainerFactory(controlContainer?: ControlContainer) {
@@ -60,9 +62,11 @@ export class FsPasswordComponent implements OnInit, OnDestroy {
     this.confirmPasswordChange.emit(this.confirmPasswordValue);
   }
 
-  public hideCurrent: boolean;
-  public hideNew: boolean;
-  public hideConfirm: boolean;
+  public hidePass = {
+    current: true,
+    modern: true,
+    confirm: true
+  };
 
   public excludeFormFunction = ((formControl) => {
     this.config.exclude.forEach(word => {
@@ -75,17 +79,16 @@ export class FsPasswordComponent implements OnInit, OnDestroy {
 
   constructor() {}
 
-  ngOnInit() {
-    this.setDefaultSettings();
+  public ngOnInit() {
     this.setDefaultConfig();
   }
 
-  ngOnDestroy() {}
+  public ngOnDestroy() {}
 
-  private setDefaultSettings() {
-    this.hideCurrent = true;
-    this.hideNew = true;
-    this.hideConfirm = true;
+  public changeHideMode(event: Event, type: 'current' | 'confirm' | 'modern') {
+    event.stopPropagation();
+
+    this.hidePass[type] = !this.hidePass[type];
   }
 
   private setDefaultConfig() {

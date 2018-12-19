@@ -17,7 +17,8 @@ export class FsPasswordService {
   constructor(private _dialog: MatDialog) {
     this._defaultDialogConfig = {
       autoFocus: false,
-      disableClose: true,
+      disableClose: false,
+      hasBackdrop: true
     };
 
     this._defaultButtons = [
