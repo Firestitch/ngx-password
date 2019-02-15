@@ -3,8 +3,9 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 import { Subscription } from 'rxjs';
 
-import { IFsPasswordButton } from '../../interfaces/fs-password-button.interface';
-import { IFsPasswordDialogConfig, IFsPasswordConfig } from '../../interfaces';
+import { IFsPasswordButton } from '../../interfaces/password-button.interface';
+import { IFsPasswordDialogConfig } from '../../interfaces/password-dialog-config.interface';
+import { IFsPasswordConfig } from '../../interfaces/password-config.interface';
 
 
 @Component({

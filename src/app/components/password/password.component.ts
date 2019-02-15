@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 
-import { IFsPasswordConfig } from '../../interfaces';
+import { IFsPasswordConfig } from '../../interfaces/password-config.interface';
 
 export function controlContainerFactory(controlContainer?: ControlContainer) {
   return controlContainer;
