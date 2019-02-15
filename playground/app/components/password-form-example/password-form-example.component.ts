@@ -14,17 +14,17 @@ export class PasswordFormExampleComponent {
 
   constructor(private _fsMessage: FsMessage) {
     this.config = {
-      minLength:  3,
+      minLength: 3,
       enableCurrentPassword: true,
-      exclude: ['admin','god','password']
-    };    
+      exclude: ['admin', 'god', 'password']
+    };
   }
 
   public submit() {
     this._fsMessage.info(`Updating ...`);
     setTimeout(() => {
       const msg = `Password successfully changed from "${this.currentPassword}" to "${this.newPassword}"`;
-      this._fsMessage.success(msg);     
+      this._fsMessage.success(msg);
     }, 1000);
   }
 }

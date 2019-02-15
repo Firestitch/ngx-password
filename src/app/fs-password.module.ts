@@ -14,9 +14,8 @@ import {
 import { FsFormModule } from '@firestitch/form';
 import { FsMessageModule } from '@firestitch/message';
 
-import { FsPasswordComponent } from './components';
+import { FsPasswordComponent, FsPasswordDialogComponent } from './components';
 import { FsPasswordService } from './services';
-import { FsPasswordDialogComponent } from './components';
 
 
 @NgModule({

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { IFsPasswordDialogConfig, IFsPasswordButton } from '../interfaces';
 import { FsPasswordDialogComponent } from '../components';

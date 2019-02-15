@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { FsPasswordService } from '@firestitch/password';
 
-import { FsPasswordService } from '../../../../src/services/fs-password.service';
+import { of } from 'rxjs';
 
 
 @Component({
@@ -13,7 +12,8 @@ import { FsPasswordService } from '../../../../src/services/fs-password.service'
 })
 export class PasswordDialogExampleComponent {
 
-  constructor(private fsPasswordService: FsPasswordService) {}
+  constructor(private fsPasswordService: FsPasswordService) {
+  }
 
   public openDialog() {
     const subscription = this.fsPasswordService.open({

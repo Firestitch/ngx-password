@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IFsPasswordConfig } from '../../../../src/interfaces/fs-password-config.interface';
+import { IFsPasswordConfig } from '@firestitch/password';
 
 
 @Component({
@@ -13,6 +13,7 @@ export class PasswordStaticExampleComponent {
     exclude: ['test', 'email@email.com']
   };
 
-  constructor() {}
+  constructor() {
+  }
 
 }

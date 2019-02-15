@@ -18,8 +18,8 @@ export function controlContainerFactory(controlContainer?: ControlContainer) {
 
 @Component({
   selector: 'fs-password',
-  templateUrl: './fs-password.component.html',
-  styleUrls: ['./fs-password.component.scss'],
+  templateUrl: './password.component.html',
+  styleUrls: ['./password.component.scss'],
   viewProviders: [
     {
       provide: ControlContainer,
