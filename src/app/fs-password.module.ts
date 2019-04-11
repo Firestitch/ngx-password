@@ -16,6 +16,7 @@ import { FsMessageModule } from '@firestitch/message';
 
 import { FsPasswordComponent } from './components/password/password.component';
 import { FsPasswordDialogComponent } from './components/password-dialog/password-dialog.component';
+import { FsPasswordToggleComponent } from './components/password-toggle/password-toggle.component';
 
 import { FsPasswordService } from './services/password.service';
 
@@ -40,7 +41,8 @@ import { FsPasswordService } from './services/password.service';
   ],
   exports: [
     FsPasswordComponent,
-    FsPasswordDialogComponent
+    FsPasswordDialogComponent,
+    FsPasswordToggleComponent
   ],
   entryComponents: [
     FsPasswordComponent,
@@ -49,8 +51,7 @@ import { FsPasswordService } from './services/password.service';
   declarations: [
     FsPasswordComponent,
     FsPasswordDialogComponent,
-  ],
-  providers: [
+    FsPasswordToggleComponent
   ],
 })
 export class FsPasswordModule {

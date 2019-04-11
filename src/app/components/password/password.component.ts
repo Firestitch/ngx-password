@@ -62,12 +62,6 @@ export class FsPasswordComponent implements OnInit, OnDestroy {
     this.confirmPasswordChange.emit(this.confirmPasswordValue);
   }
 
-  public hidePass = {
-    current: true,
-    modern: true,
-    confirm: true
-  };
-
   public excludeFormFunction = ((formControl) => {
     this.config.exclude.forEach(word => {
       if (this.newPasswordValue.toLowerCase().indexOf(word.toLowerCase()) !== -1) {
@@ -84,12 +78,6 @@ export class FsPasswordComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {}
-
-  public changeHideMode(event: Event, type: 'current' | 'confirm' | 'modern') {
-    event.stopPropagation();
-
-    this.hidePass[type] = !this.hidePass[type];
-  }
 
   private setDefaultConfig() {
     this.config = Object.assign({

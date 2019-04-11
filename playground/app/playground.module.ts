@@ -16,7 +16,8 @@ import { AppMaterialModule } from './material.module';
 import {
   PasswordStaticExampleComponent,
   PasswordFormExampleComponent,
-  PasswordDialogExampleComponent
+  PasswordDialogExampleComponent,
+  PasswordMaskComponent
 } from './components';
 
 
@@ -40,7 +41,8 @@ import {
     AppComponent,
     PasswordStaticExampleComponent,
     PasswordFormExampleComponent,
-    PasswordDialogExampleComponent
+    PasswordDialogExampleComponent,
+    PasswordMaskComponent
   ],
   providers: [
   ],
