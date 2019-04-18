@@ -12,6 +12,10 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit {
 
   constructor(private el: ElementRef) {}
 
+  public get element() {
+    return this.el.nativeElement;
+  }
+
   public toggle(e) {
 
     e.preventDefault();

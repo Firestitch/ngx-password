@@ -15,7 +15,6 @@ export function controlContainerFactory(controlContainer?: ControlContainer) {
   return controlContainer;
 }
 
-
 @Component({
   selector: 'fs-password',
   templateUrl: './password.component.html',
