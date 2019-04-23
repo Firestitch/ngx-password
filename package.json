@@ -2,7 +2,7 @@
   "name": "@firestitch/password",
   "title": "Password",
   "description": "@firestitch/password",
-  "version": "7.0.2",
+  "version": "7.0.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-password"
@@ -49,8 +49,10 @@
     "@firestitch/example": "^7.0.0",
     "@firestitch/form": "^7.5.3",
     "@firestitch/message": "^7.1.4",
+    "@firestitch/iframe": "^0.2.0",
     "codelyzer": "^4.5.0",
     "cpx": "^1.5.0",
+    "date-fns": "^2.0.0-alpha.27",
     "hammerjs": "^2.0.8",
     "moment": "^2.24.0",
     "ng-packagr": "^4.7.0",
@@ -61,8 +63,7 @@
     "typescript": "^3.1.6",
     "webpack": "^4.29.1",
     "webpack-dev-server": "^3.1.14",
-    "zone.js": "^0.8.29",
-    "date-fns": "^2.0.0-alpha.27"
+    "zone.js": "^0.8.29"
   },
   "engines": {
     "node": ">=6.0.0"
