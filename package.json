@@ -2,7 +2,7 @@
   "name": "@firestitch/password",
   "title": "Password",
   "description": "@firestitch/password",
-  "version": "7.0.3",
+  "version": "7.0.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-password"
@@ -46,10 +46,12 @@
     "@angular/router": "^7.2.4",
     "@compodoc/compodoc": "^1.1.7",
     "@firestitch/common": "^7.0.0",
-    "@firestitch/example": "^7.0.0",
+    "@firestitch/example": "^7.0.7",
+    "@firestitch/menu": "^7.0.3",
+    "@firestitch/drawer": "^7.0.1",
     "@firestitch/form": "^7.5.3",
     "@firestitch/message": "^7.1.4",
-    "@firestitch/iframe": "^0.2.0",
+    "@firestitch/dialog": "^7.0.14",
     "codelyzer": "^4.5.0",
     "cpx": "^1.5.0",
     "date-fns": "^2.0.0-alpha.27",
@@ -70,6 +72,7 @@
   },
   "peerDependencies": {
     "@firestitch/form": ">=7.5.3",
-    "@firestitch/message": ">=7.1.4"
+    "@firestitch/message": ">=7.1.4",
+    "@firestitch/dialog": ">=7.0.13"
   }
 }

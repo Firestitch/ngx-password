@@ -13,6 +13,7 @@ import {
 
 import { FsFormModule } from '@firestitch/form';
 import { FsMessageModule } from '@firestitch/message';
+import { FsDialogModule } from '@firestitch/dialog';
 
 import { FsPasswordComponent } from './components/password/password.component';
 import { FsPasswordDialogComponent } from './components/password-dialog/password-dialog.component';
@@ -38,6 +39,7 @@ import { FsPasswordService } from './services/password.service';
 
     FsFormModule,
     FsMessageModule,
+    FsDialogModule
   ],
   exports: [
     FsPasswordComponent,

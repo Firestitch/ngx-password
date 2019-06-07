@@ -8,6 +8,7 @@ import { FsFormModule } from '@firestitch/form';
 import { FsPasswordModule } from '@firestitch/password';
 
 import { FsMessageModule } from '@firestitch/message';
+import { FsDialogModule } from '@firestitch/dialog';
 import { ToastrModule } from 'ngx-toastr';
 
 import { AppComponent } from './app.component';
@@ -27,9 +28,9 @@ import {
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
-
     AppMaterialModule,
     FsFormModule,
+    FsDialogModule.forRoot(),
     FsExampleModule.forRoot(),
     FsPasswordModule.forRoot(),
     FsMessageModule.forRoot(),
