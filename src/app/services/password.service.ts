@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 
 import { Observable } from 'rxjs';
 
@@ -38,7 +38,7 @@ export class FsPasswordService {
 
   public open(configs: IFsPasswordDialogConfig) {
 
-    return Observable.create(observer => {
+    return new Observable(observer => {
 
       const config = this.composeConfig(configs);
       this._matRef = this._dialog.open(FsPasswordDialogComponent, config);
@@ -56,7 +56,7 @@ export class FsPasswordService {
 
   /**
    * Generate config with default settings and default buttons
-   * @param {IFsPasswordDialogConfig} config
+   * @param config
    * @returns MatDialogConfig
    */
   private composeConfig(config: IFsPasswordDialogConfig) {

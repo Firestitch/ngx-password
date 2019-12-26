@@ -1,10 +1,17 @@
-import { Component, ElementRef, AfterViewInit, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  AfterViewInit,
+  OnInit,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 
 @Component({
   selector: '[fsPassword]',
   templateUrl: 'password-toggle.component.html',
   styleUrls: [ 'password-toggle.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsPasswordToggleComponent implements AfterViewInit, OnInit {
 

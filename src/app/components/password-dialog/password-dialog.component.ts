@@ -1,5 +1,5 @@
-import { Component, OnDestroy, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { Subscription } from 'rxjs';
 
@@ -11,7 +11,8 @@ import { IFsPasswordConfig } from '../../interfaces/password-config.interface';
 @Component({
   selector: 'fs-password-dialog',
   templateUrl: './password-dialog.component.html',
-  styleUrls: ['./password-dialog.component.scss']
+  styleUrls: ['./password-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsPasswordDialogComponent implements OnInit, OnDestroy {
 

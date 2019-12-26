@@ -5,7 +5,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  Optional
+  Optional, ChangeDetectionStrategy
 } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 
@@ -25,7 +25,8 @@ export function controlContainerFactory(controlContainer?: ControlContainer) {
       useFactory: controlContainerFactory,
       deps: [[new Optional(), NgForm]]
     }
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsPasswordComponent implements OnInit, OnDestroy {
 
