@@ -42,7 +42,8 @@ export class FsPasswordDialogComponent implements OnInit, OnDestroy {
 
   public submit() {
 
-    this.subscription = this.data.submit(this.data.newPassword, this.data.currentPassword).subscribe(
+    this.subscription = this.data.submit(this.data.newPassword, this.data.currentPassword)
+      .subscribe(
       res => {
         this.closeDialog({ action: 'submit', result: res });
       },
