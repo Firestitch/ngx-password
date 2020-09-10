@@ -17,7 +17,7 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit {
 
   public visibile = false;
 
-  constructor(private el: ElementRef) {}
+  constructor(private el: ElementRef) { }
 
   public get element() {
     return this.el.nativeElement;
@@ -36,11 +36,11 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit {
     this.el.nativeElement.setAttribute('type', this.visibile ? 'text' : 'password');
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.updateType();
   }
 
-  ngAfterViewInit() {
+  public ngAfterViewInit() {
     this.el.nativeElement.parentElement.parentElement
     .appendChild(this.el.nativeElement.querySelector('.fs-password-toggle'));
   }
