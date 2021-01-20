@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 
 import { IFsPasswordButton } from '../../interfaces/password-button.interface';
 import { IFsPasswordDialogConfig } from '../../interfaces/password-dialog-config.interface';
 import { IFsPasswordConfig } from '../../interfaces/password-config.interface';
+import { takeUntil, tap } from 'rxjs/operators';
 
 
 @Component({
@@ -17,10 +18,13 @@ import { IFsPasswordConfig } from '../../interfaces/password-config.interface';
 export class FsPasswordDialogComponent implements OnInit, OnDestroy {
 
   public config: IFsPasswordConfig;
-  private subscription: Subscription;
 
-  constructor(public dialogRef: MatDialogRef<FsPasswordDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: IFsPasswordDialogConfig) {}
+  private _destroy$ = new Subject();
+
+  constructor(
+    public dialogRef: MatDialogRef<FsPasswordDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: IFsPasswordDialogConfig,
+  ) { }
 
   public ngOnInit() {
     this.config = {
@@ -40,14 +44,14 @@ export class FsPasswordDialogComponent implements OnInit, OnDestroy {
     }
   }
 
-  public submit() {
-
-    this.subscription = this.data.submit(this.data.newPassword, this.data.currentPassword)
-      .subscribe(
-      res => {
-        this.closeDialog({ action: 'submit', result: res });
-      },
-      (error) => {});
+  public submit = () => {
+    return this.data.submit(this.data.newPassword, this.data.currentPassword)
+      .pipe(
+        tap((result) => {
+          this.closeDialog({ action: 'submit', result });
+        }),
+        takeUntil(this._destroy$),
+      );
   }
 
   public cancel() {
@@ -55,9 +59,8 @@ export class FsPasswordDialogComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   private closeDialog(result: { action: string, result?: any }) {

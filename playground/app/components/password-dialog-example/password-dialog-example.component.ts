@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FsPasswordService } from '@firestitch/password';
 import { of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 
 
 @Component({
@@ -20,7 +21,10 @@ export class PasswordDialogExampleComponent {
       enableCurrentPassword: true, // enables current password
       exclude: ['123456'],
       submit: (newPassword, oldPassword) => {
-        return of({ password: newPassword, currentPassword: oldPassword });
+        return of({ password: newPassword, currentPassword: oldPassword })
+          .pipe(
+            delay(1000),
+          );
       },
       buttons: [
         {

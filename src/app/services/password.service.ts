@@ -14,7 +14,6 @@ export class FsPasswordService implements OnDestroy {
 
   private _defaultDialogConfig: MatDialogConfig;
   private _defaultButtons: IFsPasswordButton[];
-  private _matRef: MatDialogRef<any, any>;
   private _destroy$ = new Subject();
 
   constructor(private _dialog: MatDialog) {
@@ -68,7 +67,7 @@ export class FsPasswordService implements OnDestroy {
    * @param config
    * @returns MatDialogConfig
    */
-  private composeConfig(config: IFsPasswordDialogConfig) {
+  private composeConfig(config: IFsPasswordDialogConfig): MatDialogConfig {
 
     if (!config.buttons.length) {
       config.buttons = this._defaultButtons;
@@ -82,6 +81,10 @@ export class FsPasswordService implements OnDestroy {
       config.title = 'Change Password';
     }
 
-    return Object.assign({ data: config }, this._defaultDialogConfig );
+    return {
+      ...this._defaultDialogConfig,
+      width: config.width || this._defaultDialogConfig.width,
+      data: config,
+    };
   }
 }

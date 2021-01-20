@@ -7,6 +7,7 @@ export interface IFsPasswordDialogConfig extends IFsPasswordConfig {
   submit?: ISubmitFunc; // observable submit func,
   newPassword?: string;
   currentPassword?: string;
+  width?: string;
 }
 
 
