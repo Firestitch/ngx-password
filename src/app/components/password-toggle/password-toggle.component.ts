@@ -3,7 +3,8 @@ import {
   ElementRef,
   AfterViewInit,
   OnInit,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  Input
 } from '@angular/core';
 
 
@@ -15,7 +16,10 @@ import {
 })
 export class FsPasswordToggleComponent implements AfterViewInit, OnInit {
 
-  public visibile = false;
+  @Input()
+  public visible = false;
+
+  public visibleToggle;
 
   constructor(private el: ElementRef) { }
 
@@ -28,15 +32,16 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit {
     e.preventDefault();
     e.stopPropagation();
 
-    this.visibile = !this.visibile;
+    this.visibleToggle = !this.visibleToggle;
     this.updateType();
   }
 
   public updateType() {
-    this.el.nativeElement.setAttribute('type', this.visibile ? 'text' : 'password');
+    this.el.nativeElement.setAttribute('type', this.visibleToggle ? 'text' : 'password');
   }
 
   public ngOnInit() {
+    this.visibleToggle = this.visible;
     this.updateType();
   }
 

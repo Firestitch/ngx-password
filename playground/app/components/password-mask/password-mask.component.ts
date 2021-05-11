@@ -8,6 +8,8 @@ import { IFsPasswordConfig } from '@firestitch/password';
 })
 export class PasswordMaskComponent {
 
+  public password;
+
   public passwordConfig: IFsPasswordConfig = {
     minLength: 3,
     exclude: ['test', 'email@email.com']
