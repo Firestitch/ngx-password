@@ -56,6 +56,7 @@ export class FsPasswordComponent implements OnInit, OnDestroy {
   @Input() get confirmPassword() {
     return this.confirmPasswordValue;
   }
+
   @Output() confirmPasswordChange = new EventEmitter();
   set confirmPassword(value) {
     this.confirmPasswordValue = value;
@@ -63,8 +64,8 @@ export class FsPasswordComponent implements OnInit, OnDestroy {
   }
 
   public excludeFormFunction = ((formControl) => {
-    this.config.exclude.forEach(word => {
-      if (this.newPasswordValue.toLowerCase().indexOf(word.toLowerCase()) !== -1) {
+    this.config.exclude.forEach((word) => {
+      if (this.newPasswordValue && this.newPasswordValue.toLowerCase().indexOf(word.toLowerCase()) !== -1) {
         throw `The password cannot be the word '${this.newPasswordValue}'`;
       }
     })
