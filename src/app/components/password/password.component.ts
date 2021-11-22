@@ -71,9 +71,7 @@ export class FsPasswordComponent implements OnInit, OnDestroy {
     })
 
   }).bind(this);
-
-  constructor() {}
-
+  
   public ngOnInit() {
     this.setDefaultConfig();
   }

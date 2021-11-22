@@ -1,3 +1,4 @@
+import { AutofillEvent, AutofillMonitor } from '@angular/cdk/text-field';
 import {
   Component,
   ElementRef,
@@ -9,7 +10,7 @@ import {
 } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import { fromEvent, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { subscribeOn, takeUntil } from 'rxjs/operators';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit {
   constructor(
     private el: ElementRef,
     private _injector: Injector,
+    private _autofill: AutofillMonitor,
   ) { }
 
   public get element() {
@@ -50,19 +52,24 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit {
   }
 
   public ngOnInit(): void {
+    this._autofill.monitor(this.element)
+    .subscribe((event: AutofillEvent) => {
+        console.log(event);
+    });
+
     this._ngControl = this._injector.get(NgControl);
     this.visibleToggle = this.visible;
     this.updateType();
 
-    fromEvent(this.element, 'blur')
-    .pipe(
-      takeUntil(this._destroy$),
-    )
-    .subscribe((event: any) => {
-      if(event.target.value) {
-        this._ngControl.viewToModelUpdate(event.target.value);
-      }
-    });
+    // fromEvent(this.element, 'blur')
+    // .pipe(
+    //   takeUntil(this._destroy$),
+    // )
+    // .subscribe((event: any) => {
+    //   if(event.target.value) {
+    //     this._ngControl.viewToModelUpdate(event.target.value);
+    //   }
+    // });
   }
 
   public ngAfterViewInit(): void {
