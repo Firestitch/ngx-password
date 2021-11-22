@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { IFsPasswordConfig } from '@firestitch/password';
 import { of } from 'rxjs';
 
@@ -7,6 +7,7 @@ import { of } from 'rxjs';
   selector: 'password-mask',
   styleUrls: ['password-mask.component.scss'],
   templateUrl: 'password-mask.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PasswordMaskComponent {
 
