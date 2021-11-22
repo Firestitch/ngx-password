@@ -6,11 +6,13 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   Input,
-  Injector
+  Injector,
+  NgZone,
+  ChangeDetectorRef
 } from '@angular/core';
-import { NgControl } from '@angular/forms';
+import { NgControl, NgModel } from '@angular/forms';
 import { fromEvent, Subject } from 'rxjs';
-import { subscribeOn, takeUntil } from 'rxjs/operators';
+import { filter, subscribeOn, takeUntil } from 'rxjs/operators';
 
 
 @Component({
@@ -18,6 +20,7 @@ import { subscribeOn, takeUntil } from 'rxjs/operators';
   templateUrl: 'password-toggle.component.html',
   styleUrls: [ 'password-toggle.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [NgModel],
 })
 export class FsPasswordToggleComponent implements AfterViewInit, OnInit {
 
@@ -33,6 +36,9 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit {
     private el: ElementRef,
     private _injector: Injector,
     private _autofill: AutofillMonitor,
+    private _zone: NgZone,
+    private _cdRef: ChangeDetectorRef,
+    private _ngModel: NgModel,
   ) { }
 
   public get element() {
@@ -54,22 +60,23 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit {
   public ngOnInit(): void {
     this._autofill.monitor(this.element)
     .subscribe((event: AutofillEvent) => {
-        console.log(event);
+        alert(event);
     });
 
     this._ngControl = this._injector.get(NgControl);
     this.visibleToggle = this.visible;
     this.updateType();
 
-    // fromEvent(this.element, 'blur')
-    // .pipe(
-    //   takeUntil(this._destroy$),
-    // )
-    // .subscribe((event: any) => {
-    //   if(event.target.value) {
-    //     this._ngControl.viewToModelUpdate(event.target.value);
-    //   }
-    // });
+    // Used to fix iOS chrome autofill issue
+    // https://github.com/angular/components/issues/3414
+    fromEvent(this.element, 'change')
+    .pipe(
+      filter((event: any) => (!!event.target.value)),
+      takeUntil(this._destroy$),
+    )
+    .subscribe((event: any) => {
+      this._ngModel.control.setValue(event.target.value);
+    });
   }
 
   public ngAfterViewInit(): void {
