@@ -6,11 +6,12 @@ import {
   ChangeDetectionStrategy,
   Input,
   forwardRef,
+  OnDestroy,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { fromEvent, Subject } from 'rxjs';
-import { delay, filter, takeUntil } from 'rxjs/operators';
+import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 
 
 @Component({
@@ -26,7 +27,7 @@ import { delay, filter, takeUntil } from 'rxjs/operators';
     },
   ],
 })
-export class FsPasswordToggleComponent implements AfterViewInit, OnInit, ControlValueAccessor {
+export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestroy, ControlValueAccessor {
 
   @Input()
   public visible = false;
@@ -72,13 +73,14 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit, Control
 
     // Used to fix iOS chrome autofill issue
     // https://github.com/angular/components/issues/3414
-    fromEvent(this.element, 'change')
+    fromEvent(this.element, 'input')
       .pipe(
         filter((event: any) => (!!event.target.value)),
-        delay(50),
+        debounceTime(50),
         takeUntil(this._destroy$),
       )
       .subscribe((event: any) => {
+        console.log('h');
         this._onChange(event.target.value);
       });
   }
