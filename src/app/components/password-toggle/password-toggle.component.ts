@@ -80,7 +80,6 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestr
         takeUntil(this._destroy$),
       )
       .subscribe((event: any) => {
-        console.log('h');
         this._onChange(event.target.value);
       });
   }
