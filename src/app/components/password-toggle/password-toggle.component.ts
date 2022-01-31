@@ -8,16 +8,13 @@ import {
   forwardRef,
   OnDestroy,
   ChangeDetectorRef,
-  Optional,
 } from '@angular/core';
-import { AbstractControl, ControlContainer, ControlValueAccessor, NgControl, NgForm, NgModel, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator } from '@angular/forms';
-
-import { controlContainerFactory } from '@firestitch/core';
+import {  ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { fromEvent, Subject } from 'rxjs';
-import { debounceTime, delay, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 
-import { IResult, PasswordMeter } from 'password-meter';
+import { IRequirement, PasswordMeter } from 'password-meter'; 
 
 
 @Component({
@@ -31,30 +28,19 @@ import { IResult, PasswordMeter } from 'password-meter';
       useExisting: forwardRef(() => FsPasswordToggleComponent),
       multi: true,
     },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => FsPasswordToggleComponent),
-      multi: true,
-    },
-  ],
-  viewProviders: [
-    {
-      provide: ControlContainer,
-      useFactory: controlContainerFactory,
-      deps: [[new Optional(), NgForm]]
-    }
-  ],
+  ], 
 })
-export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestroy, ControlValueAccessor, Validator {
+export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestroy, ControlValueAccessor {
 
   @Input() public visible = false;
-  @Input() public meter = false;
+  @Input() public strength = false;
+  @Input() public strengthConfig: IRequirement;
 
   public visibleToggle;
   public passwordMeter: PasswordMeter;
   public passwordMeterResult: { level: 'weak' | 'medium' | 'strong' };
   public acceptable = false;
-  public passwordHint;
+  public passwordHint = '';
 
   private _destroy$ = new Subject();
   private _onChange;
@@ -63,7 +49,6 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestr
   constructor(
     private _el: ElementRef,
     private _cdRef: ChangeDetectorRef,
-    private _ngForm : NgForm
   ) {
    }
 
@@ -91,19 +76,14 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestr
 
   public writeValue(value) {}
 
-  public validate(control: AbstractControl): { [key: string]: any } | null {
-    if(this.meter) {
-      // if(!this.passwordMeterResult || this.passwordMeterResult.level !== 'strong') {
-      //   return { strength: 'Please provide an acceptable password' };
-      // }
-    }
-
-    return null;
-  }
-
-  public ngOnInit(): void {
-    if(this.meter) {
-      this.passwordMeter = new PasswordMeter();
+  public ngOnInit(): void {    
+    if(this.strength) {
+      this.strengthConfig = {
+        minLength: 8,
+        ...this.strengthConfig
+      }; 
+      this.passwordMeter = new PasswordMeter(this.strengthConfig);
+      this.passwordHint = this.defaultPasswordHint;    
     }
 
     this.visibleToggle = this.visible;
@@ -114,46 +94,45 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestr
     fromEvent(this.element, 'input')
       .pipe(
         debounceTime(50),
-        tap((event: any) => {
-          const value = event.target.value;
-          if(this.meter) {
-            const result = this.passwordMeter.getResult(value);
-            let level = null;
-            this.acceptable = result.percent >= 60;
-
-            if(this.acceptable) {
-              level = 'strong';
-            } else if(result.percent >= 40) {
-              level = 'medium';
-            } else {
-              level = 'weak';
-            }
-
-            this.passwordHint = null;
-            if(!this.acceptable) {
-              if(!value.match(/\W/)) {
-                this.passwordHint = 'Try including a special character';
-              } else if(!value.match(/[A-Z]/)) {
-                this.passwordHint = 'Try including an uppercase character';
-              } else {
-                this.passwordHint = 'Try adding another word or two';
-              }
-            }
-
-            this.passwordMeterResult = {
-              level,
-            }
-
-            this._cdRef.markForCheck();
-          }
-
-          this._onChange(event.target.value);
-        }),
-        delay(100),
         takeUntil(this._destroy$),
       )
       .subscribe((event: any) => {
-        this._ngForm.controls.password.markAsPristine();
+        const value = event.target.value;        
+        if(this.strength) {
+          const result = this.passwordMeter.getResult(value);
+          let level = null;
+          this.acceptable = result.percent >= 60;
+
+          if(this.acceptable) {
+            level = 'strong';
+          } else if(result.percent >= 40) {
+            level = 'medium';
+          } else {
+            level = 'weak';
+          }
+                      
+          if(this.acceptable) {
+            this.passwordHint = '';
+          } else {
+            if(!value.match(/\W/)) {
+              this.passwordHint = 'Try including a special character';
+            } else if(!value.match(/[A-Z]/)) {
+              this.passwordHint = 'Try including an uppercase character';
+            } else if(value.length < this.strengthConfig.minLength) {
+              this.passwordHint = this.defaultPasswordHint;
+            } else {              
+              this.passwordHint = 'Try adding another word or two';
+            }
+          }
+
+          this.passwordMeterResult = {
+            level,
+          }
+
+          this._cdRef.markForCheck();
+        }
+        
+        this._onChange(event.target.value);
       });
   }
 
@@ -163,15 +142,19 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestr
     matFormFieldFlex
       .appendChild(this._el.nativeElement.querySelector('.fs-password-toggle'));
 
-    if(this.meter) {
+    if(this.strength) {
       const matUnderline = matFormFieldFlex.parentElement.querySelector('.mat-form-field-underline');
 
       matUnderline
-      .after(this._el.nativeElement.querySelector('.fs-password-meter'));
+      .after(this._el.nativeElement.querySelector('.fs-password-meter'));  
 
       const matHintWrapper = matFormFieldFlex.parentElement.querySelector('.mat-form-field-hint-wrapper');
       matHintWrapper.prepend(this._el.nativeElement.querySelector('.fs-password-hint'));
     }
+  }
+
+  public get defaultPasswordHint(): string {
+    return `Make sure it’s ${this.strengthConfig.minLength} characters or more`;
   }
 
   public ngOnDestroy(): void {

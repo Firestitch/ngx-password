@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { IFsPasswordConfig } from '@firestitch/password';
+
 import { of } from 'rxjs';
 
 
@@ -11,13 +11,7 @@ import { of } from 'rxjs';
 })
 export class PasswordMeterComponent {
 
-  public password;
-  public username;
-
-  public passwordConfig: IFsPasswordConfig = {
-    minLength: 3,
-    exclude: ['test', 'email@email.com']
-  };
+  public password = '';
 
   submit = () => {
     return of(true);
