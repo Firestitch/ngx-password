@@ -12,11 +12,12 @@ import {
 } from '@angular/core';
 import { AbstractControl, ControlContainer, ControlValueAccessor, NgControl, NgForm, NgModel, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator } from '@angular/forms';
 
+import { controlContainerFactory } from '@firestitch/core';
+
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, delay, takeUntil, tap } from 'rxjs/operators';
 
-import { IResult, PasswordMeter } from 'password-meter'; 
-import { controlContainerFactory } from '../password/password.component';
+import { IResult, PasswordMeter } from 'password-meter';
 
 
 @Component({
@@ -42,7 +43,7 @@ import { controlContainerFactory } from '../password/password.component';
       useFactory: controlContainerFactory,
       deps: [[new Optional(), NgForm]]
     }
-  ],  
+  ],
 })
 export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestroy, ControlValueAccessor, Validator {
 
@@ -90,14 +91,14 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestr
 
   public writeValue(value) {}
 
-  public validate(control: AbstractControl): { [key: string]: any } | null { 
+  public validate(control: AbstractControl): { [key: string]: any } | null {
     if(this.meter) {
       // if(!this.passwordMeterResult || this.passwordMeterResult.level !== 'strong') {
       //   return { strength: 'Please provide an acceptable password' };
       // }
     }
 
-    return null;  
+    return null;
   }
 
   public ngOnInit(): void {
@@ -114,12 +115,12 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestr
       .pipe(
         debounceTime(50),
         tap((event: any) => {
-          const value = event.target.value;        
-          if(this.meter) {          
+          const value = event.target.value;
+          if(this.meter) {
             const result = this.passwordMeter.getResult(value);
             let level = null;
             this.acceptable = result.percent >= 60;
-  
+
             if(this.acceptable) {
               level = 'strong';
             } else if(result.percent >= 40) {
@@ -127,7 +128,7 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestr
             } else {
               level = 'weak';
             }
-            
+
             this.passwordHint = null;
             if(!this.acceptable) {
               if(!value.match(/\W/)) {
@@ -138,14 +139,14 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestr
                 this.passwordHint = 'Try adding another word or two';
               }
             }
-  
+
             this.passwordMeterResult = {
               level,
             }
-  
+
             this._cdRef.markForCheck();
           }
-          
+
           this._onChange(event.target.value);
         }),
         delay(100),
@@ -166,7 +167,7 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestr
       const matUnderline = matFormFieldFlex.parentElement.querySelector('.mat-form-field-underline');
 
       matUnderline
-      .after(this._el.nativeElement.querySelector('.fs-password-meter'));  
+      .after(this._el.nativeElement.querySelector('.fs-password-meter'));
 
       const matHintWrapper = matFormFieldFlex.parentElement.querySelector('.mat-form-field-hint-wrapper');
       matHintWrapper.prepend(this._el.nativeElement.querySelector('.fs-password-hint'));

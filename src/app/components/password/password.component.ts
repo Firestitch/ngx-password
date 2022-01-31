@@ -9,11 +9,10 @@ import {
 } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 
+import { controlContainerFactory } from '@firestitch/core';
+
 import { IFsPasswordConfig } from '../../interfaces/password-config.interface';
 
-export function controlContainerFactory(controlContainer?: ControlContainer) {
-  return controlContainer;
-}
 
 @Component({
   selector: 'fs-password',
@@ -71,7 +70,7 @@ export class FsPasswordComponent implements OnInit, OnDestroy {
     })
 
   }).bind(this);
-  
+
   public ngOnInit() {
     this.setDefaultConfig();
   }

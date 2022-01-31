@@ -48,6 +48,7 @@
     "@firestitch/autocomplete": "^10.0.25",
     "@firestitch/autocomplete-chips": "^10.2.3",
     "@firestitch/common": "^8.0.12",
+    "@firestitch/core": "^9.1.2",
     "@firestitch/dialog": "^12.0.0-beta.5",
     "@firestitch/drawer": "^9.2.7",
     "@firestitch/example": "^9.1.0",
