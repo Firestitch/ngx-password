@@ -30,7 +30,7 @@ export function controlContainerFactory(controlContainer?: ControlContainer) {
 })
 export class FsPasswordComponent implements OnInit, OnDestroy {
 
-  @Input() config: IFsPasswordConfig = null;
+  @Input() public config: IFsPasswordConfig = null;
 
   public currentPasswordValue: string;
   @Input() get currentPassword() {

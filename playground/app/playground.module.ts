@@ -18,7 +18,8 @@ import {
   PasswordStaticExampleComponent,
   PasswordFormExampleComponent,
   PasswordDialogExampleComponent,
-  PasswordMaskComponent
+  PasswordMaskComponent,
+  PasswordMeterComponent
 } from './components';
 
 
@@ -43,7 +44,8 @@ import {
     PasswordStaticExampleComponent,
     PasswordFormExampleComponent,
     PasswordDialogExampleComponent,
-    PasswordMaskComponent
+    PasswordMaskComponent,
+    PasswordMeterComponent,
   ],
   providers: [
   ],
