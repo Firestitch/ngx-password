@@ -5,6 +5,11 @@
 // Modules
 export { FsPasswordModule } from './app/fs-password.module';
 
+// Components
+export { FsPasswordComponent } from './app/components/password/password.component';
+export { FsPasswordDialogComponent } from './app/components/password-dialog/password-dialog.component';
+export { FsPasswordToggleComponent } from './app/components/password-toggle/password-toggle.component';
+
 // Services
 export { FsPasswordService } from './app/services/password.service';
 

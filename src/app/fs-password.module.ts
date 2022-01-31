@@ -44,10 +44,6 @@ import { FsPasswordService } from './services/password.service';
     FsPasswordDialogComponent,
     FsPasswordToggleComponent
   ],
-  entryComponents: [
-    FsPasswordComponent,
-    FsPasswordDialogComponent,
-  ],
   declarations: [
     FsPasswordComponent,
     FsPasswordDialogComponent,
@@ -55,7 +51,7 @@ import { FsPasswordService } from './services/password.service';
   ],
 })
 export class FsPasswordModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<FsPasswordModule> {
     return {
       ngModule: FsPasswordModule,
       providers: [ FsPasswordService ]
