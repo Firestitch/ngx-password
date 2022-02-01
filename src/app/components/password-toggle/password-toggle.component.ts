@@ -137,12 +137,14 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestr
   }
 
   public ngAfterViewInit(): void {
-    const matFormFieldFlex = this._el.nativeElement.parentElement.parentElement;
+    const matFormField = this._el.nativeElement.parentElement.parentElement.parentElement.parentElement;
+    const matFormFieldFlex = matFormField.querySelector('.mat-form-field-flex');
 
     matFormFieldFlex
       .appendChild(this._el.nativeElement.querySelector('.fs-password-toggle'));
 
     if(this.strength) {
+      matFormField.classList.add('form-field-multiline-subscript');
       const matUnderline = matFormFieldFlex.parentElement.querySelector('.mat-form-field-underline');
 
       matUnderline
