@@ -10,8 +10,8 @@ import { of } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PasswordMaskComponent {
-
-  public password;
+ 
+  public password = 'password';
   public username;
 
   public passwordConfig: IFsPasswordConfig = {
