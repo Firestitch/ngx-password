@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { FsMessage } from '@firestitch/message';
 import { IFsPasswordConfig } from '@firestitch/password';
 import { of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 
 @Component({
@@ -11,7 +13,7 @@ import { of } from 'rxjs';
 })
 export class PasswordMaskComponent {
  
-  public password = 'password';
+  public password;
   public username;
 
   public passwordConfig: IFsPasswordConfig = {
@@ -19,8 +21,17 @@ export class PasswordMaskComponent {
     exclude: ['test', 'email@email.com']
   };
 
+  public constructor(
+    private _message: FsMessage,
+  ) {}
+
   submit = () => {
-    return of(true);
+    return of(true)
+    .pipe(
+      tap(() => {
+        this._message.success('Submitted');
+      })
+    );
   }
 
 }

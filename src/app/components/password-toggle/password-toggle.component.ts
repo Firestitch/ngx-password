@@ -49,8 +49,7 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestr
   constructor(
     private _el: ElementRef,
     private _cdRef: ChangeDetectorRef,
-  ) {
-   }
+  ) {}
 
   public registerOnChange(fn: any) {
     this._onChange = fn;
@@ -91,6 +90,14 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestr
 
     // Used to fix iOS chrome autofill issue
     // https://github.com/angular/components/issues/3414
+    fromEvent(this.element, 'change')
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe((event: any) => {
+        this._onChange(event.target.value);
+      });
+
     fromEvent(this.element, 'input')
       .pipe(
         debounceTime(50),
@@ -153,6 +160,12 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestr
       const matHintWrapper = matFormFieldFlex.parentElement.querySelector('.mat-form-field-hint-wrapper');
       matHintWrapper.prepend(this._el.nativeElement.querySelector('.fs-password-hint'));
     }
+    
+    // this._autofill
+    //   .monitor(this.element)
+    //   .subscribe((e) => {
+    //     alert('asdasd');
+    //   });
   }
 
   public get defaultPasswordHint(): string {
