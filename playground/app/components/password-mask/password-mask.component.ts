@@ -13,7 +13,7 @@ import { tap } from 'rxjs/operators';
 })
 export class PasswordMaskComponent {
  
-  public password;
+  public password = 'test';
   public username;
 
   public passwordConfig: IFsPasswordConfig = {

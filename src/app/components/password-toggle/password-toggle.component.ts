@@ -5,11 +5,10 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   Input,
-  forwardRef,
   OnDestroy,
   ChangeDetectorRef,
 } from '@angular/core';
-import {  ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NgControl } from '@angular/forms';
 
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -22,15 +21,8 @@ import { IRequirement, PasswordMeter } from 'password-meter';
   templateUrl: 'password-toggle.component.html',
   styleUrls: ['password-toggle.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => FsPasswordToggleComponent),
-      multi: true,
-    },
-  ], 
 })
-export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestroy, ControlValueAccessor {
+export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestroy {
 
   @Input() public visible = false;
   @Input() public strength = false;
@@ -43,19 +35,12 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestr
   public passwordHint = '';
 
   private _destroy$ = new Subject();
-  private _onChange;
-  private _onTouch;
 
   constructor(
     private _el: ElementRef,
     private _cdRef: ChangeDetectorRef,
+    private _ngControl: NgControl,
   ) {}
-
-  public registerOnChange(fn: any) {
-    this._onChange = fn;
-  }
-
-  public registerOnTouched (fn: any) {  }
 
   public get element() {
     return this._el.nativeElement;
@@ -72,8 +57,6 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestr
   public updateType(): void {
     this._el.nativeElement.setAttribute('type', this.visibleToggle ? 'text' : 'password');
   }
-
-  public writeValue(value) {}
 
   public ngOnInit(): void {    
     if(this.strength) {
@@ -95,7 +78,7 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestr
         takeUntil(this._destroy$),
       )
       .subscribe((event: any) => {
-        this._onChange(event.target.value);
+        this._ngControl.viewToModelUpdate(event.target.value)
       });
 
     fromEvent(this.element, 'input')
@@ -139,7 +122,7 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestr
           this._cdRef.markForCheck();
         }
         
-        this._onChange(event.target.value);
+        this._ngControl.viewToModelUpdate(event.target.value);
       });
   }
 
@@ -160,12 +143,6 @@ export class FsPasswordToggleComponent implements AfterViewInit, OnInit, OnDestr
       const matHintWrapper = matFormFieldFlex.parentElement.querySelector('.mat-form-field-hint-wrapper');
       matHintWrapper.prepend(this._el.nativeElement.querySelector('.fs-password-hint'));
     }
-    
-    // this._autofill
-    //   .monitor(this.element)
-    //   .subscribe((e) => {
-    //     alert('asdasd');
-    //   });
   }
 
   public get defaultPasswordHint(): string {
