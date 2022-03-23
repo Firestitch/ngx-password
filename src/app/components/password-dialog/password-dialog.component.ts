@@ -30,7 +30,9 @@ export class FsPasswordDialogComponent implements OnInit, OnDestroy {
     this.config = {
       minLength: this.data.minLength,
       enableCurrentPassword: this.data.enableCurrentPassword,
-      exclude: this.data.exclude
+      exclude: this.data.exclude,
+      strength: this.data.strength,
+      strengthConfig: this.data.strengthConfig,
     };
 
     this.configStylesForButtons();

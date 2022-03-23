@@ -1,87 +1,164 @@
 import {
   Component,
-  EventEmitter,
+  ElementRef,
+  AfterViewInit,
+  OnInit,
+  ChangeDetectionStrategy,
   Input,
   OnDestroy,
-  OnInit,
-  Output,
-  Optional, ChangeDetectionStrategy
+  Injector,
 } from '@angular/core';
-import { ControlContainer, NgForm } from '@angular/forms';
+import { AbstractControl, NgControl, NG_VALIDATORS, Validator } from '@angular/forms';
 
-import { controlContainerFactory } from '@firestitch/core';
+import { fromEvent, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
-import { IFsPasswordConfig } from '../../interfaces/password-config.interface';
+import { IFsPasswordStrengthConfig } from '../../interfaces/password-strength-config.interface';
+
+import { PasswordMeter } from 'password-meter'; 
 
 
 @Component({
-  selector: 'fs-password',
-  templateUrl: './password.component.html',
+  selector: '[fsPassword]',
+  templateUrl: 'password.component.html',
   styleUrls: ['./password.component.scss'],
-  viewProviders: [
-    {
-      provide: ControlContainer,
-      useFactory: controlContainerFactory,
-      deps: [[new Optional(), NgForm]]
-    }
-  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [{
+    provide: NG_VALIDATORS,
+    useExisting: FsPasswordComponent,
+    multi: true
+ }]  
 })
-export class FsPasswordComponent implements OnInit, OnDestroy {
+export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Validator {
 
-  @Input() public config: IFsPasswordConfig = null;
+  @Input() public visible = false;
+  @Input() public strength = false;
+  @Input() public strengthConfig: IFsPasswordStrengthConfig;
 
-  public currentPasswordValue: string;
-  @Input() get currentPassword() {
-    return this.currentPasswordValue;
-  }
-  @Output() currentPasswordChange = new EventEmitter();
-  set currentPassword(value) {
-    this.currentPasswordValue = value;
-    this.currentPasswordChange.emit(this.currentPasswordValue);
-  }
+  public visibleToggle;
+  public passwordMeter: PasswordMeter;
+  public passwordMeterLevel: 'weak' | 'medium' | 'strong';
+  public acceptable = false;
+  public passwordHint = '';
 
-  public newPasswordValue: string;
-  @Input() get newPassword() {
-    return this.newPasswordValue;
-  }
-  @Output() newPasswordChange = new EventEmitter();
-  set newPassword(value) {
-    this.newPasswordValue = value;
-    this.newPasswordChange.emit(this.newPasswordValue);
+  private _destroy$ = new Subject();
+  private _ngControl: NgControl;
+
+  constructor(
+    private _el: ElementRef,
+    private _injector: Injector
+  ) {    
   }
 
-  public confirmPasswordValue: string;
-  @Input() get confirmPassword() {
-    return this.confirmPasswordValue;
+  public get element() {
+    return this._el.nativeElement;
   }
 
-  @Output() confirmPasswordChange = new EventEmitter();
-  set confirmPassword(value) {
-    this.confirmPasswordValue = value;
-    this.confirmPasswordChange.emit(this.confirmPasswordValue);
+  public toggle(e): void {
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.visibleToggle = !this.visibleToggle;
+    this.updateType();
   }
 
-  public excludeFormFunction = ((formControl) => {
-    this.config.exclude.forEach((word) => {
-      if (this.newPasswordValue && this.newPasswordValue.toLowerCase().indexOf(word.toLowerCase()) !== -1) {
-        throw `The password cannot be the word '${this.newPasswordValue}'`;
+  public updateType(): void {
+    this._el.nativeElement.setAttribute('type', this.visibleToggle ? 'text' : 'password');
+  }
+
+  public ngOnInit(): void {   
+    this._ngControl = this._injector.get(NgControl);
+
+    if(this.strength) {
+      this.strengthConfig = {
+        minLength: 8,
+        ...this.strengthConfig
+      }; 
+      this.passwordMeter = new PasswordMeter(this.strengthConfig);
+      this.passwordHint = this.defaultPasswordHint;    
+    }
+
+    this.visibleToggle = this.visible;
+    this.updateType();
+
+    // Used to fix iOS chrome autofill issue
+    // https://github.com/angular/components/issues/3414
+    fromEvent(this.element, 'change')
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe((event: any) => {
+       this._ngControl.viewToModelUpdate(event.target.value)
+      });
+  }
+
+  public validate(control: AbstractControl): { [key: string]: any } | null {
+    if(!this.strength) {
+      return null;
+    }
+
+    const value = control.value || '';
+    const result = this.passwordMeter.getResult(value);
+    this.acceptable = result.percent >= 60;
+    
+    this.passwordMeterLevel = null;
+    if(control.dirty) {
+      if(this.acceptable) {
+        this.passwordMeterLevel = 'strong';
+      } else if(result.percent >= 40) {
+        this.passwordMeterLevel = 'medium';
+      } else {
+        this.passwordMeterLevel = 'weak';
       }
-    })
+    }
+                
+    if(this.acceptable) {
+      this.passwordHint = '';
 
-  }).bind(this);
+      return null;
+    } else {
+      if(value.length === 0) {
+        this.passwordHint = this.defaultPasswordHint;
+      } else if(!value.match(/\W/)) {
+        this.passwordHint = 'Weak password, try including a special character';
+      } else if(!value.match(/[A-Z]/)) {
+        this.passwordHint = 'Weak password, try including an uppercase character';
+      } else if(value.length < this.strengthConfig.minLength) {
+        this.passwordHint = this.defaultPasswordHint;
+      } else {              
+        this.passwordHint = 'Weak password, try adding another word or two';
+      }
+    }
 
-  public ngOnInit() {
-    this.setDefaultConfig();
+    return { passwordStrength: this.passwordHint };
   }
 
-  public ngOnDestroy() {}
+  public ngAfterViewInit(): void {
+    const matFormField = this._el.nativeElement.parentElement.parentElement.parentElement.parentElement;
+    const matFormFieldFlex = matFormField.querySelector('.mat-form-field-flex');
 
-  private setDefaultConfig() {
-    this.config = Object.assign({
-      minLength: 6,
-      enableCurrentPassword: true,
-      exclude: [],
-    }, this.config);
+    matFormFieldFlex
+      .appendChild(this._el.nativeElement.querySelector('.fs-password-toggle'));
+
+    if(this.strength) {
+      //matFormField.classList.add('form-field-multiline-subscript');
+      const matUnderline = matFormFieldFlex.parentElement.querySelector('.mat-form-field-underline');
+
+      matUnderline
+      .after(this._el.nativeElement.querySelector('.fs-password-meter'));  
+
+      const matHintWrapper = matFormFieldFlex.parentElement.querySelector('.mat-form-field-hint-wrapper');
+      matHintWrapper.prepend(this._el.nativeElement.querySelector('.fs-password-hint'));
+    }
   }
+
+  public get defaultPasswordHint(): string {
+    return `Make sure it’s ${this.strengthConfig.minLength} characters or more`;
+  }
+
+  public ngOnDestroy(): void {
+    this._destroy$.next();
+    this._destroy$.complete();
+  }
+
 }

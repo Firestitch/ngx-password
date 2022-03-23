@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FsMessage } from '@firestitch/message';
+import { IFsPasswordConfig } from '@firestitch/password';
 
 
 @Component({
@@ -10,11 +11,12 @@ export class PasswordFormExampleComponent {
 
   public currentPassword: string;
   public newPassword: string;
-  public config;
+  public config: IFsPasswordConfig;
 
   constructor(private _fsMessage: FsMessage) {
     this.config = {
       minLength: 3,
+      strength: true,
       enableCurrentPassword: true,
       exclude: ['admin', 'god', 'password']
     };

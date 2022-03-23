@@ -18,6 +18,7 @@ export class PasswordDialogExampleComponent {
     this.fsPasswordService.open({
       title: 'Password Title',
       minLength: 6,
+      strength: true,
       enableCurrentPassword: true, // enables current password
       exclude: ['123456'],
       submit: (newPassword, oldPassword) => {
