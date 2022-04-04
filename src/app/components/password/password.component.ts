@@ -7,11 +7,12 @@ import {
   Input,
   OnDestroy,
   Injector,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { AbstractControl, NgControl, NG_VALIDATORS, Validator } from '@angular/forms';
 
-import { fromEvent, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { fromEvent, merge, Subject } from 'rxjs';
+import { debounceTime, filter, take, takeUntil } from 'rxjs/operators';
 
 import { IFsPasswordStrengthConfig } from '../../interfaces/password-strength-config.interface';
 
@@ -46,7 +47,8 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
 
   constructor(
     private _el: ElementRef,
-    private _injector: Injector
+    private _injector: Injector,
+    private _cdRef: ChangeDetectorRef,
   ) {    
   }
 
@@ -75,7 +77,6 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
         ...this.strengthConfig
       }; 
       this.passwordMeter = new PasswordMeter(this.strengthConfig);
-      this.passwordHint = this.defaultPasswordHint;    
     }
 
     this.visibleToggle = this.visible;
@@ -83,12 +84,15 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
 
     // Used to fix iOS chrome autofill issue
     // https://github.com/angular/components/issues/3414
-    fromEvent(this.element, 'change')
+    merge(
+      fromEvent(this.element, 'change'),
+    )
       .pipe(
+        take(1),
         takeUntil(this._destroy$),
       )
       .subscribe((event: any) => {
-       this._ngControl.viewToModelUpdate(event.target.value)
+        this._ngControl.control.setValue(event.target.value);
       });
   }
 
