@@ -6,5 +6,8 @@
   },
   "whitelistedNonPeerDependencies": [
     "."
+  ],
+  "allowedNonPeerDependencies": [
+    "password-meter"
   ]
 }
