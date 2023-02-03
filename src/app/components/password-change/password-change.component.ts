@@ -52,24 +52,12 @@ export class FsPasswordChangeComponent implements OnInit, OnDestroy {
     this.newPasswordChange.emit(this.newPasswordValue);
   }
 
-  public confirmPasswordValue: string;
-  @Input() get confirmPassword() {
-    return this.confirmPasswordValue;
-  }
-
-  @Output() confirmPasswordChange = new EventEmitter();
-  set confirmPassword(value) {
-    this.confirmPasswordValue = value;
-    this.confirmPasswordChange.emit(this.confirmPasswordValue);
-  }
-
   public excludeFormFunction = ((formControl) => {
     this.config.exclude.forEach((word) => {
       if (this.newPasswordValue && this.newPasswordValue.toLowerCase().indexOf(word.toLowerCase()) !== -1) {
         throw `The password cannot be the word '${this.newPasswordValue}'`;
       }
     })
-
   }).bind(this);
 
   public ngOnInit() {
