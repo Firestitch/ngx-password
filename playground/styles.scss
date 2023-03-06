@@ -1,6 +1,6 @@
 @use '~@firestitch/style/styles' as fs-style;
 
-@import '../tools/assets/playground.scss';
+@import '~@firestitch/component-tools/assets/playground.scss';
 @import '../src/app/styles';
 @import '~@firestitch/message/styles';
 @import '~@firestitch/dialog/styles';
