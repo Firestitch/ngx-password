@@ -105,33 +105,39 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
     const result = this.passwordMeter.getResult(value);
     this.acceptable = result.percent >= 60;
     
+    let prefix = '';
     this.passwordMeterLevel = null;
     if(control.dirty) {
       if(this.acceptable) {
         this.passwordMeterLevel = 'strong';
+        this.passwordHint = 'Your password is strong';
+        
+        if(result.percent >= 90) {
+          this.passwordHint = 'Amazing! Your password is very strong';
+        }
       } else if(result.percent >= 40) {
+        prefix = 'Could be stronger';
         this.passwordMeterLevel = 'medium';
       } else {
+        prefix = 'Too weak';
         this.passwordMeterLevel = 'weak';
       }
     }
                 
     if(this.acceptable) {
-      this.passwordHint = '';
-
       return null;
-    } else {
-      if(value.length === 0) {
-        this.passwordHint = this.defaultPasswordHint;
-      } else if(!value.match(/\W/)) {
-        this.passwordHint = 'Weak password, try including a special character';
-      } else if(!value.match(/[A-Z]/)) {
-        this.passwordHint = 'Weak password, try including an uppercase character';
-      } else if(value.length < this.strengthConfig.minLength) {
-        this.passwordHint = this.defaultPasswordHint;
-      } else {              
-        this.passwordHint = 'Weak password, try adding another word or two';
-      }
+    }
+
+    if(value.length === 0) {
+      this.passwordHint = this.defaultPasswordHint;
+    } else if(!value.match(/\W/)) {
+      this.passwordHint = `${prefix}, try including a special character`;
+    } else if(!value.match(/[A-Z]/)) {
+      this.passwordHint = `${prefix}, try including an uppercase character`;
+    } else if(value.length < this.strengthConfig.minLength) {
+      this.passwordHint = this.defaultPasswordHint;
+    } else {              
+      this.passwordHint = `${prefix}, try adding another word or two`;
     }
 
     return { passwordStrength: this.passwordHint };
