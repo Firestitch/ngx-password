@@ -9,7 +9,6 @@ import { FsPasswordModule } from '@firestitch/password';
 
 import { FsMessageModule } from '@firestitch/message';
 import { FsDialogModule } from '@firestitch/dialog';
-import { ToastrModule } from 'ngx-toastr';
 
 import { AppComponent } from './app.component';
 import { AppMaterialModule } from './material.module';
@@ -35,7 +34,6 @@ import {
     FsExampleModule.forRoot(),
     FsPasswordModule.forRoot(),
     FsMessageModule.forRoot(),
-    ToastrModule.forRoot({ preventDuplicates: true }),
   ],
   entryComponents: [
   ],
