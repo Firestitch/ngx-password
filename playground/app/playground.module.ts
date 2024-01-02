@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
 
 import { FsDialogModule } from '@firestitch/dialog';
 import { FsExampleModule } from '@firestitch/example';
@@ -29,6 +30,7 @@ import { AppMaterialModule } from './material.module';
     FormsModule,
     AppMaterialModule,
     FsFormModule,
+    RouterModule.forRoot([], { relativeLinkResolution: 'legacy' }),
     FsDialogModule.forRoot(),
     FsExampleModule.forRoot(),
     FsPasswordModule.forRoot(),

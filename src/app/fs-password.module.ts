@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -33,8 +32,6 @@ import { FsPasswordService } from './services/password.service';
     FsFormModule,
     FsMessageModule,
     FsDialogModule,
-
-    RouterModule.forRoot([], { relativeLinkResolution: 'legacy' }),
   ],
   exports: [
     FsPasswordChangeComponent,
