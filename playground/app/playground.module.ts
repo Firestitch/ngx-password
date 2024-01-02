@@ -1,29 +1,28 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
 
+import { FsDialogModule } from '@firestitch/dialog';
 import { FsExampleModule } from '@firestitch/example';
 import { FsFormModule } from '@firestitch/form';
+import { FsMessageModule } from '@firestitch/message';
 import { FsPasswordModule } from '@firestitch/password';
 
-import { FsMessageModule } from '@firestitch/message';
-import { FsDialogModule } from '@firestitch/dialog';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
-import { AppMaterialModule } from './material.module';
-
 import {
-  PasswordStaticExampleComponent,
-  PasswordFormExampleComponent,
   PasswordDialogExampleComponent,
+  PasswordFormExampleComponent,
   PasswordMaskComponent,
-  PasswordMeterComponent
+  PasswordMeterComponent,
+  PasswordStaticExampleComponent,
 } from './components';
+import { AppMaterialModule } from './material.module';
 
 
 @NgModule({
-  bootstrap: [ AppComponent ],
+  bootstrap: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -35,8 +34,6 @@ import {
     FsPasswordModule.forRoot(),
     FsMessageModule.forRoot(),
   ],
-  entryComponents: [
-  ],
   declarations: [
     AppComponent,
     PasswordStaticExampleComponent,
@@ -44,8 +41,6 @@ import {
     PasswordDialogExampleComponent,
     PasswordMaskComponent,
     PasswordMeterComponent,
-  ],
-  providers: [
   ],
 })
 export class PlaygroundModule {

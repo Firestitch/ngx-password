@@ -1,34 +1,34 @@
 import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
-  AfterViewInit,
-  OnInit,
-  ChangeDetectionStrategy,
+  Injector,
   Input,
   OnDestroy,
-  Injector,
-  ChangeDetectorRef,
+  OnInit,
 } from '@angular/core';
-import { AbstractControl, NgControl, NG_VALIDATORS, Validator } from '@angular/forms';
+import { AbstractControl, NG_VALIDATORS, NgControl, Validator } from '@angular/forms';
 
 import { fromEvent, merge, Subject } from 'rxjs';
-import { debounceTime, filter, take, takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
+
+import { PasswordMeter } from 'password-meter';
 
 import { IFsPasswordStrengthConfig } from '../../interfaces/password-strength-config.interface';
-
-import { PasswordMeter } from 'password-meter'; 
 
 
 @Component({
   selector: '[fsPassword]',
-  templateUrl: 'password.component.html',
+  templateUrl: './password.component.html',
   styleUrls: ['./password.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [{
     provide: NG_VALIDATORS,
     useExisting: FsPasswordComponent,
-    multi: true
- }]  
+    multi: true,
+  }],
 })
 export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Validator {
 
@@ -49,7 +49,7 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
     private _el: ElementRef,
     private _injector: Injector,
     private _cdRef: ChangeDetectorRef,
-  ) {    
+  ) {
   }
 
   public get element() {
@@ -68,14 +68,14 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
     this._el.nativeElement.setAttribute('type', this.visibleToggle ? 'text' : 'password');
   }
 
-  public ngOnInit(): void {   
+  public ngOnInit(): void {
     this._ngControl = this._injector.get(NgControl);
 
     if(this.strength) {
       this.strengthConfig = {
         minLength: 8,
-        ...this.strengthConfig
-      }; 
+        ...this.strengthConfig,
+      };
       this.passwordMeter = new PasswordMeter(this.strengthConfig);
     }
 
@@ -104,14 +104,14 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
     const value = control.value || '';
     const result = this.passwordMeter.getResult(value);
     this.acceptable = result.percent >= 60;
-    
+
     let prefix = '';
     this.passwordMeterLevel = null;
     if(control.dirty) {
       if(this.acceptable) {
         this.passwordMeterLevel = 'strong';
         this.passwordHint = 'Your password is strong';
-        
+
         if(result.percent >= 90) {
           this.passwordHint = 'Amazing! Your password is very strong';
         }
@@ -123,7 +123,7 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
         this.passwordMeterLevel = 'weak';
       }
     }
-                
+
     if(this.acceptable) {
       return null;
     }
@@ -136,7 +136,7 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
       this.passwordHint = `${prefix}, try including an uppercase character`;
     } else if(value.length < this.strengthConfig.minLength) {
       this.passwordHint = this.defaultPasswordHint;
-    } else {              
+    } else {
       this.passwordHint = `${prefix}, try adding another word or two`;
     }
 
@@ -155,7 +155,7 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
       const matUnderline = matFormFieldFlex.parentElement.querySelector('.mat-form-field-underline');
 
       matUnderline
-      .after(this._el.nativeElement.querySelector('.fs-password-meter'));  
+        .after(this._el.nativeElement.querySelector('.fs-password-meter'));
 
       const matHintWrapper = matFormFieldFlex.parentElement.querySelector('.mat-form-field-hint-wrapper');
       matHintWrapper.prepend(this._el.nativeElement.querySelector('.fs-password-hint'));

@@ -1,4 +1,4 @@
-import { IFsPasswordStrengthConfig } from "./password-strength-config.interface";
+import { IFsPasswordStrengthConfig } from './password-strength-config.interface';
 
 export interface IFsPasswordConfig {
   minLength?: number; // min new password length
