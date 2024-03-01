@@ -11,6 +11,7 @@ import { FsPasswordModule } from '@firestitch/password';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { AppComponent } from './app.component';
 import {
   PasswordDialogExampleComponent,
@@ -44,6 +45,12 @@ import { AppMaterialModule } from './material.module';
     PasswordMaskComponent,
     PasswordMeterComponent,
   ],
+  providers: [
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: { appearance: 'outline' },
+    },
+  ]
 })
 export class PlaygroundModule {
 }

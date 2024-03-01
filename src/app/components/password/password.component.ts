@@ -7,7 +7,7 @@ import {
   Injector,
   Input,
   OnDestroy,
-  OnInit,
+  OnInit
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NgControl, Validator } from '@angular/forms';
 
@@ -124,6 +124,8 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
       }
     }
 
+    this._updateFormField();
+
     if(this.acceptable) {
       return null;
     }
@@ -143,19 +145,21 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
     return { passwordStrength: this.passwordHint };
   }
 
+  public get matFormField(): Element {
+    return this._el.nativeElement.parentElement.parentElement.parentElement.parentElement
+  }
+
   public ngAfterViewInit(): void {
-    const matFormField = this._el.nativeElement.parentElement.parentElement.parentElement.parentElement;
-    const matFormFieldFlex = matFormField.querySelector('.mat-form-field-flex');
-
-    matFormFieldFlex
-      .appendChild(this._el.nativeElement.querySelector('.fs-password-toggle'));
-
     if(this.strength) {
-      //matFormField.classList.add('form-field-multiline-subscript');
+      const matFormField = this.matFormField;
+      const matFormFieldFlex = matFormField.querySelector('.mat-form-field-flex');
+  
       const matUnderline = matFormFieldFlex.parentElement.querySelector('.mat-form-field-underline');
 
-      matUnderline
-        .after(this._el.nativeElement.querySelector('.fs-password-meter'));
+      if(matUnderline) {
+        matUnderline
+          .after(this._el.nativeElement.querySelector('.fs-password-meter'));
+      }
 
       const matHintWrapper = matFormFieldFlex.parentElement.querySelector('.mat-form-field-hint-wrapper');
       matHintWrapper.prepend(this._el.nativeElement.querySelector('.fs-password-hint'));
@@ -163,12 +167,30 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
   }
 
   public get defaultPasswordHint(): string {
-    return `Make sure it’s ${this.strengthConfig.minLength} characters or more`;
+    return `Make sure it's ${this.strengthConfig.minLength} characters or more`;
   }
 
   public ngOnDestroy(): void {
     this._destroy$.next();
     this._destroy$.complete();
+  }
+
+  private _updateFormField(): void {
+    this.matFormField.classList.remove('password-weak');
+    this.matFormField.classList.remove('password-medium');
+    this.matFormField.classList.remove('password-strong');
+
+    if(this.passwordMeterLevel === 'weak') {
+      this.matFormField.classList.add('password-weak');
+    }
+
+    if(this.passwordMeterLevel === 'medium') {
+      this.matFormField.classList.add('password-medium');
+    }
+
+    if(this.passwordMeterLevel === 'strong') {
+      this.matFormField.classList.add('password-strong');
+    }
   }
 
 }
