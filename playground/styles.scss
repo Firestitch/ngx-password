@@ -1,9 +1,9 @@
-@use '~@firestitch/style/styles' as fs-style;
+@use '@firestitch/style/styles' as fs-style;
 
-@import '~@firestitch/component-tools/assets/playground.scss';
+@import '@firestitch/component-tools/assets/playground.scss';
 @import '../src/app/styles';
-@import '~@firestitch/message/styles';
-@import '~@firestitch/dialog/styles';
-@import '~@firestitch/form/styles';
+@import '@firestitch/message/styles';
+@import '@firestitch/dialog/styles';
+@import '@firestitch/form/styles';
 
 @include fs-style.core();
