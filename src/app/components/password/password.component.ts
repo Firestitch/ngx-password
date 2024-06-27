@@ -7,7 +7,7 @@ import {
   Injector,
   Input,
   OnDestroy,
-  OnInit
+  OnInit,
 } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NgControl, Validator } from '@angular/forms';
 
@@ -146,14 +146,14 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
   }
 
   public get matFormField(): Element {
-    return this._el.nativeElement.parentElement.parentElement.parentElement.parentElement
+    return this._el.nativeElement.parentElement.parentElement.parentElement.parentElement;
   }
 
   public ngAfterViewInit(): void {
+    const matFormField = this.matFormField;
+    const matFormFieldFlex = matFormField.querySelector('.mat-form-field-flex');
+    
     if(this.strength) {
-      const matFormField = this.matFormField;
-      const matFormFieldFlex = matFormField.querySelector('.mat-form-field-flex');
-  
       const matUnderline = matFormFieldFlex.parentElement.querySelector('.mat-form-field-underline');
 
       if(matUnderline) {
@@ -164,6 +164,9 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
       const matHintWrapper = matFormFieldFlex.parentElement.querySelector('.mat-form-field-hint-wrapper');
       matHintWrapper.prepend(this._el.nativeElement.querySelector('.fs-password-hint'));
     }
+
+    matFormFieldFlex
+      .append(this._el.nativeElement.querySelector('.fs-password-toggle'));
   }
 
   public get defaultPasswordHint(): string {
