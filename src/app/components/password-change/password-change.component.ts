@@ -31,29 +31,30 @@ export class FsPasswordChangeComponent implements OnInit {
 
   @Input() public config: IFsPasswordConfig = null;
 
-  public currentPasswordValue: string;
-
   @Input() public get currentPassword() {
     return this.currentPasswordValue;
   }
-
-  @Output() public currentPasswordChange = new EventEmitter();
-
+  
   public set currentPassword(value) {
     this.currentPasswordValue = value;
     this.currentPasswordChange.emit(this.currentPasswordValue);
   }
 
-  public newPasswordValue: string;
+  @Output() public currentPasswordChange = new EventEmitter();
+
   @Input() public get newPassword() {
     return this.newPasswordValue;
   }
-  @Output() public newPasswordChange = new EventEmitter();
-
+  
   public set newPassword(value) {
     this.newPasswordValue = value;
     this.newPasswordChange.emit(this.newPasswordValue);
   }
+
+  @Output() public newPasswordChange = new EventEmitter();
+  
+  public newPasswordValue: string;
+  public currentPasswordValue: string;
 
   public excludeFormFunction = ((formControl) => {
     this.config.exclude.forEach((word) => {

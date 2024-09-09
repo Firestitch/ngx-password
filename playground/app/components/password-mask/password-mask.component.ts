@@ -1,14 +1,16 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+
 import { FsMessage } from '@firestitch/message';
 import { IFsPasswordConfig } from '@firestitch/password';
+
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 
 @Component({
   selector: 'password-mask',
-  styleUrls: ['password-mask.component.scss'],
-  templateUrl: 'password-mask.component.html',
+  styleUrls: ['./password-mask.component.scss'],
+  templateUrl: './password-mask.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PasswordMaskComponent {
@@ -18,20 +20,20 @@ export class PasswordMaskComponent {
 
   public passwordConfig: IFsPasswordConfig = {
     minLength: 3,
-    exclude: ['test', 'email@email.com']
+    exclude: ['test', 'email@email.com'],
   };
 
-  public constructor(
+  constructor(
     private _message: FsMessage,
   ) {}
 
-  submit = () => {
+  public submit = () => {
     return of(true)
-    .pipe(
-      tap(() => {
-        this._message.success('Submitted');
-      })
-    );
-  }
+      .pipe(
+        tap(() => {
+          this._message.success('Submitted');
+        }),
+      );
+  };
 
 }

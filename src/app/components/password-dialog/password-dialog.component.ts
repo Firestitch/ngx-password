@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { Subject } from 'rxjs';
+import { takeUntil, tap } from 'rxjs/operators';
 
 import { IFsPasswordButton } from '../../interfaces/password-button.interface';
-import { IFsPasswordDialogConfig } from '../../interfaces/password-dialog-config.interface';
 import { IFsPasswordConfig } from '../../interfaces/password-config.interface';
-import { takeUntil, tap } from 'rxjs/operators';
+import { IFsPasswordDialogConfig } from '../../interfaces/password-dialog-config.interface';
 
 
 @Component({
@@ -18,6 +19,7 @@ import { takeUntil, tap } from 'rxjs/operators';
 export class FsPasswordDialogComponent implements OnInit, OnDestroy {
 
   public config: IFsPasswordConfig;
+  public cancelButton;
 
   private _destroy$ = new Subject();
 
@@ -27,6 +29,9 @@ export class FsPasswordDialogComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit() {
+    this.cancelButton = this.data.buttons
+      .find((btn) => btn.action === 'cancel');
+
     this.config = {
       minLength: this.data.minLength,
       enableCurrentPassword: this.data.enableCurrentPassword,
@@ -35,7 +40,7 @@ export class FsPasswordDialogComponent implements OnInit, OnDestroy {
       strengthConfig: this.data.strengthConfig,
     };
 
-    this.configStylesForButtons();
+    this._configStylesForButtons();
   }
 
   public click(btn) {
@@ -50,14 +55,14 @@ export class FsPasswordDialogComponent implements OnInit, OnDestroy {
     return this.data.submit(this.data.newPassword, this.data.currentPassword)
       .pipe(
         tap((result) => {
-          this.closeDialog({ action: 'submit', result });
+          this._closeDialog({ action: 'submit', result });
         }),
         takeUntil(this._destroy$),
       );
-  }
+  };
 
   public cancel() {
-    this.closeDialog({ action: 'cancel' });
+    this._closeDialog({ action: 'cancel' });
   }
 
   public ngOnDestroy() {
@@ -65,20 +70,20 @@ export class FsPasswordDialogComponent implements OnInit, OnDestroy {
     this._destroy$.complete();
   }
 
-  private closeDialog(result: { action: string, result?: any }) {
+  private _closeDialog(result: { action: string, result?: any }) {
     this.dialogRef.close(result);
   }
 
   /**
    * Config obj of classes for additing it to ngClass
    */
-  private configStylesForButtons() {
+  private _configStylesForButtons() {
     this.data.buttons.forEach((btn: IFsPasswordButton) => {
       if (btn.classList && btn.classList.length) {
         btn.classes = {};
         btn.classList.forEach((cl: string) => {
           btn.classes[cl] = true;
-        })
+        });
       }
     });
   }

@@ -5,6 +5,7 @@ export interface IFsPasswordConfig {
   enableCurrentPassword?: boolean; // enables current password
   exclude?: string[]; // excludes these words for new password,
   title?: string;
+  subtitle?: string;
   strength?: boolean;
   strengthConfig?: IFsPasswordStrengthConfig;
 }

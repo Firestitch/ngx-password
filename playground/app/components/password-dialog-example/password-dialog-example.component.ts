@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+
 import { FsPasswordService } from '@firestitch/password';
+
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
@@ -11,12 +13,15 @@ import { delay } from 'rxjs/operators';
 })
 export class PasswordDialogExampleComponent {
 
-  constructor(private fsPasswordService: FsPasswordService) {
+  constructor(
+    private _passwordService: FsPasswordService,
+  ) {
   }
 
   public openDialog() {
-    this.fsPasswordService.open({
+    this._passwordService.open({
       title: 'Password Title',
+      subtitle: 'Password subtitle',
       minLength: 6,
       strength: true,
       enableCurrentPassword: true, // enables current password
@@ -31,24 +36,20 @@ export class PasswordDialogExampleComponent {
         {
           label: 'Update Password',
           action: 'submit',
-          color: 'primary'
+          color: 'primary',
         },
         {
           label: 'Forgot Password',
-          classList: ['specific-class']
+          classList: ['specific-class'],
         },
-        {
-          label: 'Cancel',
-          action: 'cancel'
-        }
-      ]
+      ],
     }).subscribe(
-      res => {
+      (res) => {
         console.log('res', res);
       },
-      error => {
+      (error) => {
         console.log('error', error);
-      }
+      },
     );
   }
 

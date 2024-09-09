@@ -1,12 +1,13 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 
-import { takeUntil } from 'rxjs/operators';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+
 import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { FsPasswordDialogComponent } from '../components/password-dialog/password-dialog.component';
-import { IFsPasswordDialogConfig } from '../interfaces/password-dialog-config.interface';
 import { IFsPasswordButton } from '../interfaces/password-button.interface';
+import { IFsPasswordDialogConfig } from '../interfaces/password-dialog-config.interface';
 
 
 @Injectable()
@@ -20,32 +21,27 @@ export class FsPasswordService implements OnDestroy {
     this._defaultDialogConfig = {
       autoFocus: false,
       disableClose: false,
-      hasBackdrop: true
+      hasBackdrop: true,
     };
 
     this._defaultButtons = [
       {
-        label: 'Update password',
+        label: 'Save new password',
         action: 'submit',
-        color: 'primary'
+        color: 'primary',
       },
-      {
-        label: 'Cancel',
-        action: 'cancel',
-        color: 'primary'
-      }
-    ]
+    ];
   }
 
   public open(configs: IFsPasswordDialogConfig) {
     return new Observable((observer) => {
-      const config = this.composeConfig(configs);
+      const config = this._composeConfig(configs);
       this._dialog.open(FsPasswordDialogComponent, config)
-      .afterClosed()
+        .afterClosed()
         .pipe(
-          takeUntil(this._destroy$)
+          takeUntil(this._destroy$),
         )
-        .subscribe(res => {
+        .subscribe((res) => {
           if (res && res.action === 'submit') {
             observer.next(res);
           } else {
@@ -65,14 +61,13 @@ export class FsPasswordService implements OnDestroy {
    * @param config
    * @returns MatDialogConfig
    */
-  private composeConfig(config: IFsPasswordDialogConfig): MatDialogConfig {
-
+  private _composeConfig(config: IFsPasswordDialogConfig): MatDialogConfig {
     if (!config.buttons.length) {
       config.buttons = this._defaultButtons;
     }
 
     config.buttons.forEach((btn) => {
-      btn.type = btn.action == 'submit' ? 'submit' : 'button';
+      btn.type = btn.action === 'submit' ? 'submit' : 'button';
     });
 
     if (!config.title) {
