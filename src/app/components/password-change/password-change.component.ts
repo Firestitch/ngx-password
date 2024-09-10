@@ -57,11 +57,15 @@ export class FsPasswordChangeComponent implements OnInit {
   public currentPasswordValue: string;
 
   public excludeFormFunction = ((formControl) => {
-    this.config.exclude.forEach((word) => {
-      if (this.newPasswordValue && this.newPasswordValue.toLowerCase().indexOf(word.toLowerCase()) !== -1) {
-        throw new Error(`The password cannot be the word '${this.newPasswordValue}'`);
-      }
-    });
+    (this.config.exclude || [])
+      .forEach((word) => {
+        if (
+          this.newPasswordValue && 
+          this.newPasswordValue.toLowerCase().indexOf(word.toLowerCase()) !== -1
+        ) {
+          throw new Error(`The password cannot be the word '${this.newPasswordValue}'`);
+        }
+      });
   });
 
   public ngOnInit() {

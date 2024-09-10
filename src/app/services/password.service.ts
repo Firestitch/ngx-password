@@ -33,9 +33,9 @@ export class FsPasswordService implements OnDestroy {
     ];
   }
 
-  public open(configs: IFsPasswordDialogConfig) {
+  public open(config: IFsPasswordDialogConfig) {
     return new Observable((observer) => {
-      const config = this._composeConfig(configs);
+      config = this._composeConfig(config);
       this._dialog.open(FsPasswordDialogComponent, config)
         .afterClosed()
         .pipe(
