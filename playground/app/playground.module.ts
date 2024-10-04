@@ -31,7 +31,7 @@ import { AppMaterialModule } from './material.module';
     FormsModule,
     AppMaterialModule,
     FsFormModule,
-    RouterModule.forRoot([], { relativeLinkResolution: 'legacy' }),
+    RouterModule.forRoot([], {}),
     FsDialogModule.forRoot(),
     FsExampleModule.forRoot(),
     FsPasswordModule.forRoot(),
