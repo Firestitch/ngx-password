@@ -174,7 +174,7 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
   }
 
   public ngOnDestroy(): void {
-    this._destroy$.next();
+    this._destroy$.next(null);
     this._destroy$.complete();
   }
 
