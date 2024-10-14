@@ -1,7 +1,6 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   Injector,
@@ -44,11 +43,11 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
 
   private _destroy$ = new Subject();
   private _ngControl: NgControl;
+  private _matFormField;
 
   constructor(
     private _el: ElementRef,
     private _injector: Injector,
-    private _cdRef: ChangeDetectorRef,
   ) {
   }
 
@@ -146,22 +145,37 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
   }
 
   public get matFormField(): Element {
-    return this._el.nativeElement.parentElement.parentElement.parentElement.parentElement;
+    if(this._matFormField) {
+      return this._matFormField;
+    }
+
+    let el = this._el.nativeElement;
+    while (el.parentNode) {
+      el = el.parentNode;
+      
+      if (el?.classList.contains('mat-mdc-form-field')) {
+        this._matFormField = el;
+
+        return el;
+      }
+    }
+
+    return null;
   }
 
   public ngAfterViewInit(): void {
-    const matFormField = this.matFormField;
-    const matFormFieldFlex = matFormField.querySelector('.mat-form-field-flex');
-    
+    const matFormFieldFlex = this.matFormField.querySelector('.mat-mdc-form-field-flex');
+    this.matFormField.classList.add('form-field-multiline-subscript');
+
     if(this.strength) {
-      const matUnderline = matFormFieldFlex.parentElement.querySelector('.mat-form-field-underline');
+      const matUnderline = this.matFormField.querySelector('.mat-mdc-form-field-subscript-wrapper');
 
       if(matUnderline) {
         matUnderline
-          .after(this._el.nativeElement.querySelector('.fs-password-meter'));
+          .prepend(this._el.nativeElement.querySelector('.fs-password-meter'));
       }
 
-      const matHintWrapper = matFormFieldFlex.parentElement.querySelector('.mat-form-field-hint-wrapper');
+      const matHintWrapper = this.matFormField.querySelector('.mat-mdc-form-field-hint-wrapper');
       matHintWrapper.prepend(this._el.nativeElement.querySelector('.fs-password-hint'));
     }
 
