@@ -56,7 +56,7 @@ export class FsPasswordChangeComponent implements OnInit {
   public newPasswordValue: string;
   public currentPasswordValue: string;
 
-  public excludeFormFunction = ((formControl) => {
+  public excludeFormFunction = (() => {
     (this.config.exclude || [])
       .forEach((word) => {
         if (

@@ -76,7 +76,7 @@ export class FsPasswordService implements OnDestroy {
 
     return {
       ...this._defaultDialogConfig,
-      width: config.width || this._defaultDialogConfig.width,
+      width: config.width || '350px',
       data: config,
     };
   }
