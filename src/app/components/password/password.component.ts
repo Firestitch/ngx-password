@@ -33,6 +33,7 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
 
   @Input() public visible = false;
   @Input() public strength = false;
+  @Input() public defaultPasswordHint: string;
   @Input() public strengthConfig: IFsPasswordStrengthConfig;
 
   public visibleToggle;
@@ -68,6 +69,7 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
   }
 
   public ngOnInit(): void {
+    this.defaultPasswordHint = this.defaultPasswordHint ?? this.minLengthPasswordHint;
     this._ngControl = this._injector.get(NgControl);
 
     if(this.strength) {
@@ -136,7 +138,7 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
     } else if(!value.match(/[A-Z]/)) {
       this.passwordHint = `${prefix}, try including an uppercase character`;
     } else if(value.length < this.strengthConfig.minLength) {
-      this.passwordHint = this.defaultPasswordHint;
+      this.passwordHint = this.minLengthPasswordHint;
     } else {
       this.passwordHint = `${prefix}, try adding another word or two`;
     }
@@ -183,8 +185,10 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
       .append(this._el.nativeElement.querySelector('.fs-password-toggle'));
   }
 
-  public get defaultPasswordHint(): string {
-    return `Make sure it's ${this.strengthConfig.minLength} characters or more`;
+  public get minLengthPasswordHint(): string {
+    return this.strengthConfig.minLength ? 
+      `Make sure it's ${String(this.strengthConfig.minLength)} characters or more` : 
+      '';
   }
 
   public ngOnDestroy(): void {
