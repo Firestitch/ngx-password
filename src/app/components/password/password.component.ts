@@ -69,7 +69,6 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
   }
 
   public ngOnInit(): void {
-    this.defaultPasswordHint = this.defaultPasswordHint ?? this.minLengthPasswordHint;
     this._ngControl = this._injector.get(NgControl);
 
     if(this.strength) {
@@ -79,7 +78,8 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
       };
       this.passwordMeter = new PasswordMeter(this.strengthConfig);
     }
-
+    
+    this.defaultPasswordHint = this.defaultPasswordHint ?? this.minLengthPasswordHint;
     this.visibleToggle = this.visible;
     this.updateType();
 
