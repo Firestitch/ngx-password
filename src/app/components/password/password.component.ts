@@ -79,7 +79,9 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
       this.passwordMeter = new PasswordMeter(this.strengthConfig);
     }
     
-    this.defaultPasswordHint = this.defaultPasswordHint ?? this.minLengthPasswordHint;
+    this.defaultPasswordHint = this.defaultPasswordHint === undefined ? 
+      this.minLengthPasswordHint :
+      this.defaultPasswordHint;
     this.visibleToggle = this.visible;
     this.updateType();
 
