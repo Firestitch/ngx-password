@@ -71,15 +71,15 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
   public ngOnInit(): void {
     this._ngControl = this._injector.get(NgControl);
 
-    if(this.strength) {
+    if (this.strength) {
       this.strengthConfig = {
         minLength: 8,
         ...this.strengthConfig,
       };
       this.passwordMeter = new PasswordMeter(this.strengthConfig);
     }
-    
-    this.defaultPasswordHint = this.defaultPasswordHint === undefined ? 
+
+    this.defaultPasswordHint = this.defaultPasswordHint === undefined ?
       this.minLengthPasswordHint :
       this.defaultPasswordHint;
     this.visibleToggle = this.visible;
@@ -100,7 +100,7 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
   }
 
   public validate(control: AbstractControl): { [key: string]: any } | null {
-    if(!this.strength) {
+    if (!this.strength) {
       return null;
     }
 
@@ -110,15 +110,15 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
 
     let prefix = '';
     this.passwordMeterLevel = null;
-    if(control.dirty) {
-      if(this.acceptable) {
+    if (control.dirty) {
+      if (this.acceptable) {
         this.passwordMeterLevel = 'strong';
         this.passwordHint = 'Your password is strong';
 
-        if(result.percent >= 90) {
+        if (result.percent >= 90) {
           this.passwordHint = 'Amazing! Your password is very strong';
         }
-      } else if(result.percent >= 40) {
+      } else if (result.percent >= 40) {
         prefix = 'Could be stronger';
         this.passwordMeterLevel = 'medium';
       } else {
@@ -129,17 +129,17 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
 
     this._updateFormField();
 
-    if(this.acceptable) {
+    if (this.acceptable) {
       return null;
     }
 
-    if(value.length === 0) {
+    if (value.length === 0) {
       this.passwordHint = this.defaultPasswordHint;
-    } else if(!value.match(/\W/)) {
+    } else if (!value.match(/\W/)) {
       this.passwordHint = `${prefix}, try including a special character`;
-    } else if(!value.match(/[A-Z]/)) {
+    } else if (!value.match(/[A-Z]/)) {
       this.passwordHint = `${prefix}, try including an uppercase character`;
-    } else if(value.length < this.strengthConfig.minLength) {
+    } else if (value.length < this.strengthConfig?.minLength) {
       this.passwordHint = this.minLengthPasswordHint;
     } else {
       this.passwordHint = `${prefix}, try adding another word or two`;
@@ -149,14 +149,14 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
   }
 
   public get matFormField(): Element {
-    if(this._matFormField) {
+    if (this._matFormField) {
       return this._matFormField;
     }
 
     let el = this._el.nativeElement;
     while (el.parentNode) {
       el = el.parentNode;
-      
+
       if (el?.classList.contains('mat-mdc-form-field')) {
         this._matFormField = el;
 
@@ -171,10 +171,10 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
     const matFormFieldFlex = this.matFormField.querySelector('.mat-mdc-form-field-flex');
     this.matFormField.classList.add('form-field-multiline-subscript');
 
-    if(this.strength) {
+    if (this.strength) {
       const matUnderline = this.matFormField.querySelector('.mat-mdc-form-field-subscript-wrapper');
 
-      if(matUnderline) {
+      if (matUnderline) {
         matUnderline
           .prepend(this._el.nativeElement.querySelector('.fs-password-meter'));
       }
@@ -188,8 +188,8 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
   }
 
   public get minLengthPasswordHint(): string {
-    return this.strengthConfig.minLength ? 
-      `Make sure it's ${String(this.strengthConfig.minLength)} characters or more` : 
+    return this.strengthConfig?.minLength ?
+      `Make sure it's ${String(this.strengthConfig.minLength)} characters or more` :
       '';
   }
 
@@ -203,15 +203,15 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
     this.matFormField.classList.remove('password-medium');
     this.matFormField.classList.remove('password-strong');
 
-    if(this.passwordMeterLevel === 'weak') {
+    if (this.passwordMeterLevel === 'weak') {
       this.matFormField.classList.add('password-weak');
     }
 
-    if(this.passwordMeterLevel === 'medium') {
+    if (this.passwordMeterLevel === 'medium') {
       this.matFormField.classList.add('password-medium');
     }
 
-    if(this.passwordMeterLevel === 'strong') {
+    if (this.passwordMeterLevel === 'strong') {
       this.matFormField.classList.add('password-strong');
     }
   }
