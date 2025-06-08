@@ -20,7 +20,7 @@ export class PasswordDialogExampleComponent {
 
   public openDialog() {
     this._passwordService.open({
-      title: 'Password Title',
+      title: 'Password title',
       subtitle: 'Password subtitle',
       minLength: 6,
       strength: true,

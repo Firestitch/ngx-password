@@ -71,7 +71,7 @@ export class FsPasswordService implements OnDestroy {
     });
 
     if (!config.title) {
-      config.title = 'Change Password';
+      config.title = 'Change password';
     }
 
     return {
