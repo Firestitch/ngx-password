@@ -13,9 +13,8 @@ import { AbstractControl, NG_VALIDATORS, NgControl, Validator } from '@angular/f
 import { fromEvent, merge, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
-import { PasswordMeter } from 'password-meter';
-
 import { IFsPasswordStrengthConfig } from '../../interfaces/password-strength-config.interface';
+import { PasswordMeter } from '../../password-meter/password-meter';
 
 
 @Component({
