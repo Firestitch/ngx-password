@@ -1,13 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  Injector,
-  Input,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Injector, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NgControl, Validator } from '@angular/forms';
 
 import { fromEvent, merge, Subject } from 'rxjs';
@@ -42,6 +33,9 @@ import { MatHint } from '@angular/material/form-field';
     ],
 })
 export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Validator {
+  private _el = inject(ElementRef);
+  private _injector = inject(Injector);
+
 
   @Input() public visible = false;
   @Input() public strength = false;
@@ -57,12 +51,6 @@ export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Va
   private _destroy$ = new Subject();
   private _ngControl: NgControl;
   private _matFormField;
-
-  constructor(
-    private _el: ElementRef,
-    private _injector: Injector,
-  ) {
-  }
 
   public get element() {
     return this._el.nativeElement;

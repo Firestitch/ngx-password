@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 
@@ -37,16 +37,14 @@ import { NgClass } from '@angular/common';
     ],
 })
 export class FsPasswordDialogComponent implements OnInit, OnDestroy {
+  dialogRef = inject<MatDialogRef<FsPasswordDialogComponent>>(MatDialogRef);
+  data = inject<IFsPasswordDialogConfig>(MAT_DIALOG_DATA);
+
 
   public config: IFsPasswordConfig;
   public cancelButton;
 
   private _destroy$ = new Subject();
-
-  constructor(
-    public dialogRef: MatDialogRef<FsPasswordDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: IFsPasswordDialogConfig,
-  ) { }
 
   public ngOnInit() {
     this.cancelButton = this.data.buttons

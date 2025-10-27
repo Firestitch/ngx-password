@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { FsPasswordService } from '@firestitch/password';
 
@@ -16,11 +16,8 @@ import { FsFormModule } from '@firestitch/form';
     imports: [MatButton, FsFormModule],
 })
 export class PasswordDialogExampleComponent {
+  private _passwordService = inject(FsPasswordService);
 
-  constructor(
-    private _passwordService: FsPasswordService,
-  ) {
-  }
 
   public openDialog() {
     this._passwordService.open({

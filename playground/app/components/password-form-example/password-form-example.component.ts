@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FsMessage } from '@firestitch/message';
 import { IFsPasswordConfig } from '@firestitch/password';
 import { FormsModule } from '@angular/forms';
@@ -19,12 +19,14 @@ import { MatButton } from '@angular/material/button';
     ],
 })
 export class PasswordFormExampleComponent {
+  private _fsMessage = inject(FsMessage);
+
 
   public currentPassword: string;
   public newPassword: string;
   public config: IFsPasswordConfig;
 
-  constructor(private _fsMessage: FsMessage) {
+  constructor() {
     this.config = {
       minLength: 3,
       strength: true,

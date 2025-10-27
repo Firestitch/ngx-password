@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
@@ -12,12 +12,14 @@ import { IFsPasswordDialogConfig } from '../interfaces/password-dialog-config.in
 
 @Injectable()
 export class FsPasswordService implements OnDestroy {
+  private _dialog = inject(MatDialog);
+
 
   private _defaultDialogConfig: MatDialogConfig;
   private _defaultButtons: IFsPasswordButton[];
   private _destroy$ = new Subject();
 
-  constructor(private _dialog: MatDialog) {
+  constructor() {
     this._defaultDialogConfig = {
       autoFocus: false,
       disableClose: false,

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { FsMessage } from '@firestitch/message';
 import { IFsPasswordConfig } from '@firestitch/password';
@@ -29,6 +29,8 @@ import { MatButton } from '@angular/material/button';
     ],
 })
 export class PasswordMaskComponent {
+  private _message = inject(FsMessage);
+
  
   public password = 'test';
   public username;
@@ -37,10 +39,6 @@ export class PasswordMaskComponent {
     minLength: 3,
     exclude: ['test', 'email@email.com'],
   };
-
-  constructor(
-    private _message: FsMessage,
-  ) {}
 
   public submit = () => {
     return of(true)
