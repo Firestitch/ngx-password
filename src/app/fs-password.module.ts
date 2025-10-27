@@ -19,30 +19,26 @@ import { FsPasswordService } from './services/password.service';
 
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-
-    MatButtonModule,
-    MatDialogModule,
-    MatIconModule,
-    MatInputModule,
-    MatTooltipModule,
-
-    FsFormModule,
-    FsMessageModule,
-    FsDialogModule,
-  ],
-  exports: [
-    FsPasswordChangeComponent,
-    FsPasswordDialogComponent,
-    FsPasswordComponent,
-  ],
-  declarations: [
-    FsPasswordChangeComponent,
-    FsPasswordDialogComponent,
-    FsPasswordComponent,
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatIconModule,
+        MatInputModule,
+        MatTooltipModule,
+        FsFormModule,
+        FsMessageModule,
+        FsDialogModule,
+        FsPasswordChangeComponent,
+        FsPasswordDialogComponent,
+        FsPasswordComponent,
+    ],
+    exports: [
+        FsPasswordChangeComponent,
+        FsPasswordDialogComponent,
+        FsPasswordComponent,
+    ],
 })
 export class FsPasswordModule {
   public static forRoot(): ModuleWithProviders<FsPasswordModule> {

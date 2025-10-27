@@ -5,13 +5,28 @@ import { IFsPasswordConfig } from '@firestitch/password';
 
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { FormsModule } from '@angular/forms';
+import { FsFormModule } from '@firestitch/form';
+import { MatFormField } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { FsPasswordComponent } from '../../../../src/app/components/password/password.component';
+import { MatButton } from '@angular/material/button';
 
 
 @Component({
-  selector: 'password-mask',
-  styleUrls: ['./password-mask.component.scss'],
-  templateUrl: './password-mask.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'password-mask',
+    styleUrls: ['./password-mask.component.scss'],
+    templateUrl: './password-mask.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        FormsModule,
+        FsFormModule,
+        MatFormField,
+        MatInput,
+        FsPasswordComponent,
+        MatButton,
+    ],
 })
 export class PasswordMaskComponent {
  

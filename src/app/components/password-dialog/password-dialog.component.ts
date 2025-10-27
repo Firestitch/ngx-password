@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 
 import { Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
@@ -8,13 +8,33 @@ import { takeUntil, tap } from 'rxjs/operators';
 import { IFsPasswordButton } from '../../interfaces/password-button.interface';
 import { IFsPasswordConfig } from '../../interfaces/password-config.interface';
 import { IFsPasswordDialogConfig } from '../../interfaces/password-dialog-config.interface';
+import { FormsModule } from '@angular/forms';
+import { FsFormModule } from '@firestitch/form';
+import { FsDialogModule } from '@firestitch/dialog';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { FsPasswordChangeComponent } from '../password-change/password-change.component';
+import { MatButton } from '@angular/material/button';
+import { NgClass } from '@angular/common';
 
 
 @Component({
-  selector: 'fs-password-dialog',
-  templateUrl: './password-dialog.component.html',
-  styleUrls: ['./password-dialog.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'fs-password-dialog',
+    templateUrl: './password-dialog.component.html',
+    styleUrls: ['./password-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        FormsModule,
+        FsFormModule,
+        FsDialogModule,
+        CdkScrollable,
+        MatDialogContent,
+        FsPasswordChangeComponent,
+        MatDialogActions,
+        MatButton,
+        NgClass,
+        MatDialogClose,
+    ],
 })
 export class FsPasswordDialogComponent implements OnInit, OnDestroy {
 

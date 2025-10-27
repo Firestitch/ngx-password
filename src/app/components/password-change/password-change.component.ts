@@ -7,25 +7,40 @@ import {
   Optional,
   Output,
 } from '@angular/core';
-import { ControlContainer, NgForm } from '@angular/forms';
+import { ControlContainer, NgForm, FormsModule } from '@angular/forms';
 
 import { controlContainerFactory } from '@firestitch/core';
 
 import { IFsPasswordConfig } from '../../interfaces/password-config.interface';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
+import { FsPasswordComponent } from '../password/password.component';
+import { FsFormModule } from '@firestitch/form';
 
 
 @Component({
-  selector: 'fs-password',
-  templateUrl: './password-change.component.html',
-  styleUrls: ['./password-change.component.scss'],
-  viewProviders: [
-    {
-      provide: ControlContainer,
-      useFactory: controlContainerFactory,
-      deps: [[new Optional(), NgForm]],
-    },
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'fs-password',
+    templateUrl: './password-change.component.html',
+    styleUrls: ['./password-change.component.scss'],
+    viewProviders: [
+        {
+            provide: ControlContainer,
+            useFactory: controlContainerFactory,
+            deps: [[new Optional(), NgForm]],
+        },
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        MatFormField,
+        MatLabel,
+        MatIcon,
+        MatInput,
+        FormsModule,
+        FsPasswordComponent,
+        FsFormModule,
+    ],
 })
 export class FsPasswordChangeComponent implements OnInit {
 

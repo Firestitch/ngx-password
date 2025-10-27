@@ -15,18 +15,31 @@ import { take, takeUntil } from 'rxjs/operators';
 
 import { IFsPasswordStrengthConfig } from '../../interfaces/password-strength-config.interface';
 import { PasswordMeter } from '../../password-meter/password-meter';
+import { MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { NgClass } from '@angular/common';
+import { MatHint } from '@angular/material/form-field';
 
 
 @Component({
-  selector: '[fsPassword]',
-  templateUrl: './password.component.html',
-  styleUrls: ['./password.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [{
-    provide: NG_VALIDATORS,
-    useExisting: FsPasswordComponent,
-    multi: true,
-  }],
+    selector: '[fsPassword]',
+    templateUrl: './password.component.html',
+    styleUrls: ['./password.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [{
+            provide: NG_VALIDATORS,
+            useExisting: FsPasswordComponent,
+            multi: true,
+        }],
+    standalone: true,
+    imports: [
+        MatIconButton,
+        MatTooltip,
+        MatIcon,
+        NgClass,
+        MatHint,
+    ],
 })
 export class FsPasswordComponent implements AfterViewInit, OnInit, OnDestroy, Validator {
 
